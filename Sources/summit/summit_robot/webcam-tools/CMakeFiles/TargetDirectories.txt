@@ -1,0 +1,2 @@
+/home/summit/Sources/summit/summit_robot/webcam-tools/uvcdynctrl/CMakeFiles/uvcdynctrl.dir
+/home/summit/Sources/summit/summit_robot/webcam-tools/libwebcam/CMakeFiles/webcam.dir

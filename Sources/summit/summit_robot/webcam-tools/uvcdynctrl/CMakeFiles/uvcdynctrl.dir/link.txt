@@ -1,0 +1,1 @@
+/usr/bin/gcc      CMakeFiles/uvcdynctrl.dir/main.c.o CMakeFiles/uvcdynctrl.dir/controls.c.o CMakeFiles/uvcdynctrl.dir/cmdline.c.o  -o uvcdynctrl-0.2.1 -rdynamic ../libwebcam/libwebcam.so.0.2.1 -lxml2 -Wl,-rpath,/home/summit/Sources/summit/summit_robot/webcam-tools/libwebcam: 

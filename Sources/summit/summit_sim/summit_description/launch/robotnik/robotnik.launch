@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- start world -->
+  <!-- include file="$(find summit__description)/launch/robotnik/robotnik_empty.launch"/ -->
+
+  <!-- SEND OBJECTS TO PARAM SERVER -->
+
+  <!-- send desktop_table to param server -->
+  <param name="table_description" textfile="$(find summit_description)/Media/models/desktop_table.urdf" />
+
+  <!-- send 4_legs_table to param server -->
+  <param name="4_legs_table_description" textfile="$(find summit_description)/Media/models/4_legs_table.urdf" />
+
+  <!-- sent 4_legs_table_small to param server -->
+  <param name="4_legs_small_table_description" command="$(find xacro)/xacro.py $(find gazebo_worlds)/objects/table.urdf.xacro" />
+
+  <!-- sent logo to param server -->
+  <!--param name="logo_description" textfile="$(find summit__description)/Media/models/logo.urdf" /-->
+
+
+  <!-- ADD OBJECTS TO THE WORLD -->
+
+  <!-- left part hall -->
+  <node name="spawn_table1" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 10.3 -y -2.15  -z 0.8 -Y -1.575 -model table_1" respawn="false" output="screen" />
+
+  <node name="spawn_table2" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 8.3 -y -2.15  -z 0.8 -Y -1.575 -model table_2" respawn="false" output="screen" />
+
+  <node name="spawn_table3" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 6.3 -y -2.15  -z 0.8 -Y -1.575 -model table_3" respawn="false" output="screen" />
+
+  <!-- right part hall -->
+  <node name="spawn_table4" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 10.2 -y -5.2  -z 0.8 -Y -1.575 -model table_4" respawn="false" output="screen" />
+
+  <node name="spawn_table5" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 8.2 -y -5.2  -z 0.8 -Y -1.575 -model table_5" respawn="false" output="screen" />
+
+  <node name="spawn_table6" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 6.2 -y -5.2  -z 0.8 -Y -1.575 -model table_6" respawn="false" output="screen" />
+
+  <!--node name="spawn_table7" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 4.4 -y -5.2  -z 0.8 -Y -1.575 -model table_7"
+ respawn="false" output="screen" /-->
+
+  <node name="spawn_table8" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 2.6 -y -5.2  -z 0.8 -Y -1.575 -model table_8"
+ respawn="false" output="screen" />
+
+  <node name="spawn_table9" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 0.6 -y -5.2  -z 0.8 -Y -1.575 -model table_9"
+ respawn="false" output="screen" />
+
+  <node name="spawn_table10" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x -1.8 -y -5.2  -z 0.8 -Y -1.575 -model table_10"
+ respawn="false" output="screen" />
+
+  <node name="spawn_table11" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x -3.7 -y -5.2  -z 0.8 -Y -1.575 -model table_11"
+ respawn="false" output="screen" />
+
+  <!-- room 1 -->
+  <node name="spawn_table12" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x 1.6 -y -1.9  -z 0.8 -Y 1.575 -model table_12" respawn="false" output="screen" />
+
+  <!-- room 2 -->
+  <node name="spawn_table13" pkg="gazebo" type="spawn_model" args="-urdf -param table_description -x -0.35 -y -1.5 -z 0.8 -Y 0.0 -model table_13" respawn="false" output="screen" />
+
+  <!-- meeting -->
+  <node name="spawn_table14" pkg="gazebo" type="spawn_model" args="-urdf -param 4_legs_small_table_description -x -10.5 -y 1.0 -z 0.0 -Y 1.575 -model table_14" respawn="false" output="screen" />
+
+  <!-- workshop -->
+  <node name="spawn_table15" pkg="gazebo" type="spawn_model" args="-urdf -param 4_legs_table_description -x 9.0 -y 3.75 -z 1.0 -Y 0.0 -model table_15" respawn="false" output="screen" />
+
+  <node name="spawn_table16" pkg="gazebo" type="spawn_model" args="-urdf -param 4_legs_table_description -x -2.81 -y 3.25 -z 1.0 -Y 0.0 -model table_16" respawn="false" output="screen" />
+
+  <!-- pc's -->
+  <node name="spawn_table17" pkg="gazebo" type="spawn_model" args="-urdf -param 4_legs_small_table_description -x -12.5 -y -4.0 -z 0.0 -Y 0.0 -model table_17" respawn="false" output="screen" />
+
+  <!-- logos -->
+  <!--node name="logo1" pkg="gazebo" type="spawn_model" args="-urdf -param logo_description -x 5 -y -2.15  -z 0.1 -Y -3.1415 -model logo1" respawn="false" output="screen" />
+
+  <node name="logo2" pkg="gazebo" type="spawn_model" args="-urdf -param logo_description -x 2.17 -y 5.85 -z 0.1 -Y 1.575 -model logo2" respawn="false" output="screen" />
+
+  <node name="logo3" pkg="gazebo" type="spawn_model" args="-urdf -param logo_description -x -12.75 -y 1.75 -z 0.1 -Y 3.15 -model logo3" respawn="false" output="screen" /-->
+
+
+</launch>

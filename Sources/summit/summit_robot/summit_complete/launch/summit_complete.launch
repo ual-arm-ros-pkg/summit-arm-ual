@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- IMU -->
+  <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu.launch"/>
+  <!-- IMU MADGWICK FILTER -->
+  <include file="$(find imu_filter_madgwick)/launch/imu_filter_madgwick.launch"/>
+  
+  <!-- GPS -->
+  <include file="$(find summit_complete)/launch/gpsd_client.launch"/>
+
+  <!-- start robot_state_publisher - publish fixed transforms, load robot model to param server -->
+  <include file="$(find summit_description)/launch/summit_state.launch"/>
+
+  <!-- start hokuyo node -->
+  <!-- node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node_front" output="screen"/-->
+
+  <!-- start sound node -->
+  <node pkg="sound_play" type="soundplay_node.py" name="sound_play_node" output="screen"/>
+
+  <!-- rosrun sound_play say.py 'READY' -->
+  <node pkg="sound_play" type="say.py" name="sound_play_say" args="'SUMMIT, READY'" output="screen"/>
+
+  <!-- start sphere camera nodes -->
+  <include file="$(find sphere_camera)/launch/sphereptz.launch"/>
+
+  <!-- start summit_controller node -->
+  <!-- node pkg="summit_controller_dspic" type="summit_controller_dspic" name="summit_controller_dspic" output="screen"/ -->
+  <include file="$(find summit_controller_dspic)/launch/summit_controller_dspic.launch"/>
+
+  <!-- start summit_joystick node -->
+  <!-- include file="$(find summit_joystick)/summit_joy.launch" / --> 
+  <include file="$(find summit_pad)/launch/summit_pad.launch"/>
+
+</launch>
+

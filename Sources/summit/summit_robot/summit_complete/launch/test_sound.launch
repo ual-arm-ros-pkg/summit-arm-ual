@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- start sound node -->
+  <node pkg="sound_play" type="soundplay_node.py" name="sound_play_node" output="screen"/>
+
+  <!-- rosrun sound_play say.py 'READY' -->
+  <node pkg="sound_play" type="say.py" name="sound_play_say" args="'SUMMIT READY'" 
+output="screen"/>
+
+</launch>
+

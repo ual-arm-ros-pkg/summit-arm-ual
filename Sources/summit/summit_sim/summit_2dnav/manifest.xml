@@ -1,0 +1,17 @@
+<package>
+  <description brief="summit_2dnav">
+
+     summit_2dnav
+
+  </description>
+  <author>Roberto</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/summit_2dnav</url>
+  <depend package="move_base"/>
+  <depend package="summit_tf"/>
+  <depend package="summit_odometry"/>
+
+</package>
+
+

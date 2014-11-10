@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="summit_odometry" type="summit_odometry" name="summit_odometry_node" output="screen"/>
+</launch>
+

@@ -1,0 +1,21 @@
+<package>
+  <description brief="summit_odometry">
+
+     summit_odometry
+
+  </description>
+  <author>Robert</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/summit_odometry</url>
+  <depend package="roscpp"/>
+  <depend package="summit_controller"/>
+  <depend package="nav_msgs"/>
+  <depend package="tf"/>
+  <depend package="pr2_mechanism_model"/>
+  <depend package="pr2_controller_interface"/>
+  <depend package="sensor_msgs"/>
+
+</package>
+
+
