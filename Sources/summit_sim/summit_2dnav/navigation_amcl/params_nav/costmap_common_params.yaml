@@ -1,0 +1,9 @@
+footprint:  [ [0.55, -0.40], [0.55, 0.40], [-0.55, 0.40], [-0.55, -0.40]]
+
+# Se supone que son calculados a partir del footprint, pero los indico por si acaso
+inscribed_radius: 0.45            
+circumscribed_radius: 0.75    
+
+transform_tolerance: 0.5 
+map_type: costmap
+

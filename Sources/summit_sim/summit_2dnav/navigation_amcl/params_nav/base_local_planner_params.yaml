@@ -1,0 +1,39 @@
+TrajectoryPlannerROS:
+  max_vel_x: 0.8 #0.6 #1.0 #0.5
+  min_vel_x: 0.1
+  escape_vel: -0.07 #0.0 #-0.07
+
+  max_rotational_vel: 0.4 #0.3
+  max_vel_theta: 0.4  # = max_rotational_vel
+  min_vel_theta: -0.4 # = -min_rotational_vel
+  min_in_place_rotational_vel: 0.2
+  min_in_place_vel_theta: 0.2
+  
+  #Set the acceleration limits of the robot
+  acc_lim_th: 1.0 #default=3.2
+  acc_lim_theta: 1.0 # = acc_lim_th
+  acc_lim_x: 1.0 #default=2.5
+  acc_lim_y: 0.0 #0.25 #0.4 #0.0 #default=2.5
+
+  
+   #We'll configure how long and with what granularity we'll forward simulate trajectories
+  sim_time: 1.5 #2.0
+  sim_granularity: 0.025
+  vx_samples: 4
+  vtheta_samples: 20
+
+  #Set the tolerance on achieving a goal
+  yaw_goal_tolerance: 0.08 #0.05
+  xy_goal_tolerance: 0.2 #0.1
+  latch_xy_goal_tolerance: true
+
+  meter_scoring: true  #Distancias al path y goal --> F= en celdas, T= en metros
+
+  controller_frequency: 15.0 #20.0
+  heading_scoring: true #default false
+
+  holonomic_robot: false
+
+  #Whether to use the Dynamic Window Approach or whether to use Trajectory Rollout
+  dwa: false 
+

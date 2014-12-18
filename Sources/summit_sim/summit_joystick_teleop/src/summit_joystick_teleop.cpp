@@ -264,7 +264,7 @@ SummitJoy::SummitJoy():
 	}
 	
 	/*
-	// ROS_INFO("Service PTZ = [%s]", cmd_service_ptz_.c_str());
+	ROS_INFO("Service PTZ = [%s]", cmd_service_ptz_.c_str());
 	ROS_INFO("Service set_mode = [%s]", cmd_set_mode_.c_str());
 	ROS_INFO("Axis linear = %d", linear_);
 	ROS_INFO("Axis angular = %d", angular_);

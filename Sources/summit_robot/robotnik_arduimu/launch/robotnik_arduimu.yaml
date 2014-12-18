@@ -1,0 +1,15 @@
+robotnik_arduimu:
+  port:  /dev/ttyUSB_IMU
+  base_frame_id: base_link
+  imu_frame_id: imu_link
+  # calibrate_mag.m
+  x_offset:  -0.0196    # X0  non inverted values
+  y_offset:  0.0282     # Y0
+  x_gain: 1.0783      # x_gain non inverted values
+  y_gain: 0.9217      # y_gain 
+
+  #x_offset:  -0.0151
+  #y_offset:  0.0391
+  #x_gain: 1.0115
+  #y_gain: 0.9885
+

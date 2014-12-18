@@ -303,7 +303,7 @@ SummitControllerClass(ros::NodeHandle h) : diagnostic_(),
   orientation_x_ = 0.0; orientation_y_ = 0.0; orientation_z_ = 0.0; orientation_w_ = 0.0;
 
   // Default active kinematic mode
-  active_kinematic_mode_ = SINGLE_ACKERMANN;
+  active_kinematic_mode_ = DUAL_ACKERMANN_INVERTED;
 
   // Advertise controller services
   srv_SetMode_ = summit_robot_control_node_handle.advertiseService("set_mode", &SummitControllerClass::srvCallback_SetMode, this);

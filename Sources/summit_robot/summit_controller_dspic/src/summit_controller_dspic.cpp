@@ -100,22 +100,22 @@ void summit_controller_dspic::SwitchToState(States new_state){
 	iState_ = new_state;
 	switch (new_state) {
 		case INIT_STATE:
-			//ROS_INFO("summit_controller_dspic:: switching to INIT state");
+			ROS_INFO("summit_controller_dspic:: switching to INIT state");
 			break;
 		case STANDBY_STATE:
-			//ROS_INFO("summit_controller_dspic:: switching to STANDBY state");
+			ROS_INFO("summit_controller_dspic:: switching to STANDBY state");
 			break;
 		case READY_STATE:
-			//ROS_INFO("summit_controller_dspic:: switching to READY state");
+			ROS_INFO("summit_controller_dspic:: switching to READY state");
 			break;
 		case EMERGENCY_STATE:
-			//ROS_INFO("summit_controller_dspic:: switching to EMERGENCY state");
+			ROS_INFO("summit_controller_dspic:: switching to EMERGENCY state");
 			break;
 		case FAILURE_STATE:
-			//ROS_INFO("summit_controller_dspic:: switching to FAILURE state");
+			ROS_INFO("summit_controller_dspic:: switching to FAILURE state");
 			break;
         	case SHUTDOWN_STATE:
-			//ROS_INFO("summit_controller_dspic:: switching to SHUTDOWN state");
+			ROS_INFO("summit_controller_dspic:: switching to SHUTDOWN state");
 			break;
 		default:
 			ROS_ERROR("summit_controller_dspic:: Switching to UNKNOWN state");
@@ -332,7 +332,7 @@ void summit_controller_dspic::ReadyState(){
 			// Saves current time
 			// Inits nodeguard reply timer
 			tDsPicReply = ros::Time::now(); 
-			//ROS_INFO("summit_controller_dspic::ReadyState: Ret = %d", ret);
+			ROS_INFO("summit_controller_dspic::ReadyState: Ret = %d", ret);
 		break;
 	}
 
@@ -1034,7 +1034,7 @@ int summit_controller_dspic::ProcessMsg(char *msg){
 		return OK_GET_PARAMETERS;
         }
 	if(!strcmp(cReceivedTokens[0], GET_ENCODER)){
-		//ROS_INFO("summit_controller_dspic::ProcessMsg: Encoder: = %s, crc=%s", cReceivedTokens[1], cReceivedTokens[2]);
+		ROS_INFO("summit_controller_dspic::ProcessMsg: Encoder: = %s, crc=%s", cReceivedTokens[1], cReceivedTokens[2]);
 		enc = atoi(cReceivedTokens[1]);
 		//received_crc = atoi(cReceivedTokens[2]);
 		//memset(command, 0, 64);
@@ -1280,7 +1280,7 @@ void summit_controller_dspic::SetMotorReferences(double rads, double mps)
     else if( (mps> 0.0) && (mps > MOTOR_DEF_MAX_SPEED) )
 	mps = MOTOR_DEF_MAX_SPEED;
 
-    //ROS_INFO("summit_controller_dspic::SetMotorReferences: v=%2.3f a=%2.3f", rad, mps);
+    ROS_INFO("summit_controller_dspic::SetMotorReferences: v=%2.3f a=%2.3f", rads, mps);
 
     // Set references and command for next iteration
     dsPic_data.rad = rads;
@@ -1547,7 +1547,7 @@ int main(int argc, char** argv)
 	
 	std::string base_frame_id;
 	std::string odom_frame_id;
-	pn.param<std::string>("base_frame_id", base_frame_id, "base_link");
+	pn.param<std::string>("base_frame_id", base_frame_id, "base_footprint");
 	pn.param<std::string>("odom_frame_id", odom_frame_id, "odom");
 
 	// Create node object
@@ -1655,7 +1655,7 @@ int main(int argc, char** argv)
 		
 		//publish the message
 		odom_pub.publish(odom);
-
+		ROS_INFO("Odometria -> x = %f, y = %f", odom.pose.pose.position.x, odom.pose.pose.position.y);
 
 		// ******************************************************************************************
 		//publish battery

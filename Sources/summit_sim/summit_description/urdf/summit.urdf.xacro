@@ -110,10 +110,10 @@
   <joint name="joint_back_left_wheel_dir" type="continuous">
     <parent link="base_link"/>
     <child link="back_left_wheel_dir"/>
-    <origin xyz="-${wheel_offset_x} ${wheel_offset_y} 0" rpy="0 0 0" /> 
+    <origin xyz="-0.185 0.105 0" rpy="0 0 0" />
     <axis xyz="0 0 1" rpy="0 0 0" />
-    <limit effort="${steer_joint_effort_limit}" velocity="${steer_joint_velocity_limit}" lower="-0.7854" upper="0.7854"/>
-    <joint_properties damping="${steer_joint_damping}" friction="{steer_joint_friction}"/>
+    <limit effort="100.0" velocity="3.0" lower="-0.7854" upper="0.7854"/>
+    <joint_properties damping="0.2" friction="0.1"/>
   </joint>
 
   <transmission name="joint_blw_trans_dir">
@@ -121,7 +121,7 @@
     <joint name="joint_back_left_wheel_dir" />
     <actuator name="joint_blw_motor_dir">
 	  <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>${steer_mechanical_reduction}</mechanicalReduction>
+      <mechanicalReduction>100.0</mechanicalReduction>
 	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
 	</actuator>	      
   </transmission>
@@ -156,8 +156,8 @@
     <child link="back_left_wheel"/>
     <origin xyz="0.0 0.060 0" rpy="0 0 0" /> 
     <axis xyz="0 1 0" rpy="0 0 0" />
-    <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
-    <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
+    <limit effort="100.0" velocity="200.0"/>
+    <joint_properties damping="0.0" friction="0.0"/>
   </joint>
 
   <transmission name="joint_blw_trans">
@@ -165,7 +165,7 @@
      <joint name="joint_back_left_wheel" />
      <actuator name="joint_blw_motor">
 	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-        <mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+        <mechanicalReduction>100.0</mechanicalReduction>
      	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
 	 </actuator>       
   </transmission>
@@ -198,10 +198,10 @@
   <joint name="joint_back_right_wheel_dir" type="continuous">
     <parent link="base_link"/>
     <child link="back_right_wheel_dir"/>
-    <origin xyz="-${wheel_offset_x} -${wheel_offset_y} 0" rpy="0 0 0" /> 
+    <origin xyz="-0.185 -0.105 0" rpy="0 0 0" />
     <axis xyz="0 0 1" rpy="0 0 0" />
-    <limit effort="${steer_joint_effort_limit}" velocity="${steer_joint_velocity_limit}" lower="-0.7854" upper="0.7854"/>
-    <joint_properties damping="${steer_joint_damping}" friction="{steer_joint_friction}"/>
+    <limit effort="100.0" velocity="3.0" lower="-0.7854" upper="0.7854"/>
+    <joint_properties damping="0.2" friction="0.1"/>
   </joint>
   
   <transmission name="joint_brw_trans_dir">
@@ -209,7 +209,7 @@
     <joint name="joint_back_right_wheel_dir" />
     <actuator name="joint_brw_motor_dir">
 	  <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>${steer_mechanical_reduction}</mechanicalReduction>
+      <mechanicalReduction>100.0</mechanicalReduction>
 	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
 	</actuator>	      
   </transmission>
@@ -244,8 +244,8 @@
     <child link="back_right_wheel"/>
     <origin xyz="0.0 -0.060 0" rpy="0 0 0" /> 
     <axis xyz="0 1 0" rpy="0 0 0" />
-    <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
-    <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
+    <limit effort="100.0" velocity="200.0"/>
+    <joint_properties damping="0.0" friction="0.0"/>
   </joint>
 
   <transmission name="joint_brw_trans">
@@ -253,7 +253,7 @@
      <joint name="joint_back_right_wheel" />
      <actuator name="joint_brw_motor">
 	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-        <mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+        <mechanicalReduction>1.0</mechanicalReduction>
      	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
 	 </actuator>       
   </transmission>
@@ -287,10 +287,10 @@
   <joint name="joint_front_left_wheel_dir" type="continuous">
     <parent link="base_link"/>
     <child link="front_left_wheel_dir"/>
-    <origin xyz="${wheel_offset_x} ${wheel_offset_y} 0" rpy="0 0 0" /> 
+    <origin xyz="0.185 0.105 0" rpy="0 0 0" />
     <axis xyz="0 0 1" rpy="0 0 0" />
-    <limit effort="${steer_joint_effort_limit}" velocity="${steer_joint_velocity_limit}" lower="-0.7854" upper="0.7854"/>
-    <joint_properties damping="${steer_joint_damping}" friction="{steer_joint_friction}"/>
+    <limit effort="100.0" velocity="3.0" lower="-0.7854" upper="0.7854"/>
+    <joint_properties damping="0.2" friction="0.1"/>
   </joint>
   
   <transmission name="joint_flw_trans_dir">
@@ -298,7 +298,7 @@
     <joint name="joint_front_left_wheel_dir" />
     <actuator name="joint_flw_motor_dir">
 	  <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>${steer_mechanical_reduction}</mechanicalReduction>
+      <mechanicalReduction>100.0</mechanicalReduction>
 	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
 	</actuator>	      
   </transmission>
@@ -332,8 +332,8 @@
     <child link="front_left_wheel"/>
     <origin xyz="0.0 0.060 0" rpy="0 0 0" /> 
     <axis xyz="0 1 0" rpy="0 0 0" />
-    <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
-    <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
+    <limit effort="100.0" velocity="200.0"/>
+    <joint_properties damping="0.0" friction="0.0"/>
   </joint>
 
   <transmission name="joint_flw_trans">
@@ -341,7 +341,7 @@
      <joint name="joint_front_left_wheel" />
      <actuator name="joint_flw_motor">
 	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-        <mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+        <mechanicalReduction>1.0</mechanicalReduction>
      	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
 	 </actuator>       
   </transmission>
@@ -376,10 +376,10 @@
   <joint name="joint_front_right_wheel_dir" type="continuous">
     <parent link="base_link"/>
     <child link="front_right_wheel_dir"/>
-    <origin xyz="${wheel_offset_x} -${wheel_offset_y} 0" rpy="0 0 0" /> 
+    <origin xyz="0.185 -0.105 0" rpy="0 0 0" />
     <axis xyz="0 0 1" rpy="0 0 0" />
-    <limit effort="${steer_joint_effort_limit}" velocity="${steer_joint_velocity_limit}" lower="-0.7854" upper="0.7854"/>
-    <joint_properties damping="${steer_joint_damping}" friction="{steer_joint_friction}"/>
+    <limit effort="100.0" velocity="3.0" lower="-0.7854" upper="0.7854"/>
+    <joint_properties damping="0.2" friction="0.1"/>
   </joint>
     
   <transmission name="joint_frw_trans_dir">
@@ -387,7 +387,7 @@
     <joint name="joint_front_right_wheel_dir" />
     <actuator name="joint_frw_motor_dir">
 	  <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>${steer_mechanical_reduction}</mechanicalReduction>
+      <mechanicalReduction>100.0</mechanicalReduction>
 	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
 	</actuator>	      
   </transmission>
@@ -422,8 +422,8 @@
     <child link="front_right_wheel"/>
     <origin xyz="0.0 -0.060 0" rpy="0 0 0" /> 
     <axis xyz="0 1 0" rpy="0 0 0" />
-    <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
-    <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
+    <limit effort="100.0" velocity="200.0"/>
+    <joint_properties damping="0.0" friction="0.0"/>
   </joint>
 
   <transmission name="joint_frw_trans">
@@ -431,7 +431,7 @@
      <joint name="joint_front_right_wheel" />
      <actuator name="joint_frw_motor">
 	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-        <mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+        <mechanicalReduction>1.0</mechanicalReduction>
      	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
 	 </actuator>       
   </transmission>
@@ -440,15 +440,15 @@
 
 
 
-  <!-- HOKUYO SENSOR -->
-  <joint name="hokuyo_laser_joint" type="fixed">
+  <!-- RPLIDAR LASER -->
+  <joint name="rplidar_laser_joint" type="fixed">
      <axis xyz="0 1 0" />
-     <origin xyz="0.226 0 0.120"/>  
+     <origin xyz="0.01 0 0.24" rpy="0 0 -3.15"/>
      <parent link="base_link"/>
-     <child link="hokuyo_laser_link"/>
+     <child link="rplidar_laser_link"/>
   </joint>
 
-  <link name="hokuyo_laser_link" type="laser">
+  <link name="rplidar_laser_link" type="laser">
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -505,6 +505,12 @@
        <origin xyz="0 0 0" rpy="0 0 0" />
        <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1" />
     </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
   </link>
   
   <joint name="joint_camera" type="fixed">
@@ -519,6 +525,7 @@
   <link name="camera_pan_link">
      <inertial>
        <mass value="0.1" />
+       <!-- origin xyz="0 0 0" rpy="0 0 0" / -->
        <origin xyz="0 0 0" rpy="0 0 0" />
        <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1" />
     </inertial>
@@ -529,8 +536,8 @@
      <origin xyz="0.0 0.0 0.0"/>
      <parent link="camera_base_link"/>
      <child link="camera_pan_link"/>
-     <limit effort="${ptz_joint_effort_limit}" velocity="${ptz_joint_velocity_limit}" lower="-3.1416" upper="3.1416"/>
-     <joint_properties damping="${ptz_joint_damping}" friction="{ptz_joint_friction}"/>
+     <limit effort="100.0" velocity="100.0" lower="-3.1416" upper="3.1416"/>
+     <joint_properties damping="0.1" friction="0.1"/>
   </joint>  
   
   <transmission name="joint_pan_trans">
@@ -538,7 +545,7 @@
      <joint name="joint_camera_pan" />
      <actuator name="pan_motor">
 	   <hardwareInterface>EffortJointInterface</hardwareInterface>
-       <mechanicalReduction>${ptz_mechanical_reduction}</mechanicalReduction>
+       <mechanicalReduction>1.0</mechanicalReduction>
      </actuator>
   </transmission>
  
@@ -556,8 +563,8 @@
      <origin xyz="0.0 0.0 0.0"/>
      <parent link="camera_pan_link"/>
      <child link="camera_tilt_link"/>
-     <limit effort="${ptz_joint_effort_limit}" velocity="${ptz_joint_velocity_limit}" lower="-1.5708" upper="1.5708"/>
-     <joint_properties damping="${ptz_joint_damping}" friction="{ptz_joint_friction}"/>
+     <limit effort="100.0" velocity="100.0" lower="-1.5708" upper="1.5708"/>
+     <joint_properties damping="0.1" friction="0.1"/>
   </joint>
   
   <transmission name="joint_tilt_trans">
@@ -565,7 +572,7 @@
      <joint name="joint_camera_tilt" />
      <actuator name="tilt_motor">
 	   <hardwareInterface>EffortJointInterface</hardwareInterface>
-       <mechanicalReduction>${ptz_mechanical_reduction}</mechanicalReduction>
+       <mechanicalReduction>1.0</mechanicalReduction>
      </actuator>
   </transmission>
     

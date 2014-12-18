@@ -1,0 +1,17 @@
+global_costmap:
+  global_frame: /map
+  robot_base_frame: /base_link
+  update_frequency: 3.0 #default=5.0
+  publish_frequency: 1.0 
+  inflation_radius: 1.5 
+  cost_scaling_factor: 2.0 #10.0=default
+  static_map: true
+  resolution: 0.1 #default=0.05 meters/cells
+  obstacle_range: 6
+  max_obstacle_range: 6
+  raytrace_range: 6.3 
+
+
+  observation_sources: laserfront_scan_sensor 
+  laserfront_scan_sensor: {sensor_frame: base_laser_link, data_type: LaserScan, topic: base_scan, marking: true, clearing: false, expected_update_rate: 1.0} #0.6}
+  

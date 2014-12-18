@@ -1,0 +1,29 @@
+<!-- -*- mode: XML -*- -->
+
+<launch>
+
+  <!-- Run the map server -->
+  <node pkg="map_server" type="map_server" name="map_server" args="$(find summit_2dnav)map1.yaml" />
+
+   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find summit_2dnav)/navigation_amcl/params_nav/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find summit_2dnav)/navigation_amcl/params_nav/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find summit_2dnav)/navigation_amcl/params_nav/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find summit_2dnav)/navigation_amcl/params_nav/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find summit_2dnav)/navigation_amcl/params_nav/base_local_planner_params.yaml" command="load" />
+	<param name="base_global_planner" type="string" value="navfn/NavfnROS" />
+	<param name="base_local_planner" type="string" value="base_local_planner/TrajectoryPlannerROS" />
+    	<param name="planner_patience" type="double" value="5.0" />
+	<param name="controller_frequency" type="double" value="15.0" /> 
+    	<param name="controller_patience" type="double" value="15.0" /> 
+    	<param name="conservative_reset_dist" type="double" value="3.0" />
+    	<param name="recovery_behavior_enabled" type="bool" value="true" />
+    	<param name="clearing_rotation_allowed" type="bool" value="true" />
+	<param name="shutdown_costmaps" value="false" />
+	<param name="restore_defaults" value="false" />	
+	<param name="oscillation_timeout" type="double" value="0.0" /> 
+	<param name="oscillation_distance" type="double" value="0.5" /> 
+  </node>
+
+
+</launch>

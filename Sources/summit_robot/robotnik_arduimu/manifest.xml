@@ -1,0 +1,23 @@
+<package>
+  <description brief="robotnik_arduimu">
+
+     robotnik_arduimu - reads and publishes arduimu raw data
+
+  </description>
+  <author>Robotnik</author>
+  <license>GNU LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/robotnik_arduimu</url>
+  <depend package="roscpp"/>
+  <depend package="tf"/>
+  <depend package="self_test"/>
+  <depend package="diagnostic_updater"/>
+  <depend package="std_srvs"/>
+  <depend package="sensor_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="std_srvs"/>
+  <depend package="std_msgs"/>
+
+</package>
+
+

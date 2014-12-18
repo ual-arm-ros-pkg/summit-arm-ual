@@ -1,31 +1,30 @@
 <?xml version="1.0"?>
 <launch>
 
-  <!-- start hokuyo node -->
-  <!-- include file="$(find summit_complete)/launch/hokuyo_laser.launch"/ -->
+  <!-- start rplidar node -->
+  <include file="$(find rplidar_ros)launch/rplidar.launch"/>
 
   <!-- start robot_state_publisher - publish fixed transforms, load robot model to param server -->
-  <include file="$(find summit_description)/launch/summit_state.launch"/>
-
-  <!-- start hokuyo node -->
-  <!-- node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node_front" output="screen"/-->
+  <include file="$(find summit_description)/launch/summit_bueno.launch"/>
 
   <!-- start sound node -->
-  <!-- node pkg="sound_play" type="soundplay_node.py" name="sound_play_node" output="screen"/ -->
-  <!-- rosrun sound_play say.py 'READY' -->
-  <!-- node pkg="sound_play" type="say.py" name="sound_play_say" args="'SUMMIT, READY'" output="screen"/ -->
+  <node pkg="sound_play" type="soundplay_node.py" name="sound_play_node" output="screen"/>
+  <!-- rosrun sound_play say.py 'READY'  -->
+  <node pkg="sound_play" type="say.py" name="sound_play_say" args="'SUMMIT, READY'" output="screen"/>
+  <!-- node pkg="sound_play" type="play.py" name="sound_play_play" args="Hold.wav" output="screen"/ -->
 
   <!-- start axis camera -->
-  <!-- include file="$(find axis_camera)/launch/axis_ptz.launch"/ -->  
+  <!-- include file="$(find axis_camera)/launch/axis.launch"/ -->
 
-  <!-- start gpsd -->
+  <!-- start sphere camera nodes -->
+  <include file="$(find sphere_camera)/launch/sphereptz.launch"/>
+
+
+  <!-- start GPS -->
   <!-- include file="$(find summit_complete)/launch/gpsd_client.launch"/ -->
 
-  <!-- start fotonic camera -->
-  <!-- include file="$(find fotonic_3dcamera)/launch/fotonic_3dcamera.launch"/-->
-
   <!-- start robotnik_arduimu and madgwick filter -->
-  <!-- include file="$(find robotnik_arduimu)/launch/robotnik_arduimu_madgwick.launch"/ -->
+  <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu_madgwick.launch"/>
 
   <!-- start summit_controller node -->
   <!-- node pkg="summit_controller_dspic" type="summit_controller_dspic" name="summit_controller_dspic" output="screen"/ -->
@@ -36,4 +35,3 @@
   <include file="$(find summit_pad)/launch/summit_pad.launch"/>
 
 </launch>
-

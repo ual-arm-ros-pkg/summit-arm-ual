@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- load parameters -->
+  <rosparam command="load" file="$(find robotnik_arduimu)/launch/robotnik_arduimu.yaml"/>
+
+  <!-- start robotnik arduimu node -->
+  <node pkg="robotnik_arduimu" type="robotnik_arduimu" name="robotnik_arduimu" output="screen"/>
+
+</launch>
+

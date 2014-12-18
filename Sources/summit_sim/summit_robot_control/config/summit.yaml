@@ -7,3 +7,4 @@ summit_robot_control:
      summit_wheel_diameter: 0.160
      
      publish_odom_tf: true 
+port:  /dev/ttyS0
