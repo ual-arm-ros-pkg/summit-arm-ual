@@ -1,0 +1,12 @@
+<stack>
+  <description brief="summit_robot">summit_robot</description>
+  <author>Maintained by Robotnik</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/summit_robot</url>
+  <depend stack="common_msgs" /> <!-- nav_msgs, sensor_msgs, geometry_msgs -->
+  <depend stack="geometry" /> <!-- tf -->
+  <depend stack="ros" />
+  <depend stack="ros_comm" /> <!-- roscpp -->
+
+</stack>

@@ -1,0 +1,9 @@
+summit_robot_control:
+      
+     model: summit
+      
+      # kinematic parameters 
+     summit_d_wheels: 0.372
+     summit_wheel_diameter: 0.160
+     
+     publish_odom_tf: true 

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <!--load summit_controller_dspic.yaml-->
+  <rosparam file="$(find summit_controller_dspic)/launch/summit_controller_dspic.yaml" command="load"/>
+  <node pkg="summit_controller_dspic" type="summit_controller_dspic" name="summit_controller_dspic" output="screen"/>
+</launch>
+

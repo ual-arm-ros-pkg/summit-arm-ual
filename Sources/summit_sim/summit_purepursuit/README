@@ -1,0 +1,5 @@
+roslaunch summit_gazebo summit.launch
+roslaunch summit_robot_control summit_robot_control.launch
+roslaunch summit_purepursuit purepursuit.launch
+roslaunch summit_purepursuit purepursuit_marker.launch
+rosrun rviz rviz (add InteractiveMarkers /path_marker/update), click with right button mouse on the first marker for options to add waypoints or start/stop route.

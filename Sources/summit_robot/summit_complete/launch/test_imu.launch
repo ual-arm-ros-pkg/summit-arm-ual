@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- start imu node -->
+  <!-- node pkg="microstrain_3dmgx2" type="imu_node" name="imu_node" output="screen"/ -->
+  <include file="$(find microstrain_3dmgx2_imu)/microstrain_3dmgx2.launch" />
+
+  <!-- robot_pose_ekf needs at least 1 odom input -->
+  <!-- node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+    <param name="output_frame" value="odom"/>
+    <param name="freq" value="30.0"/>
+    <param name="sensor_timeout" value="1.0"/>
+    <param name="odom_used" value="false"/>
+    <param name="imu_used" value="true"/>
+    <param name="vo_used" value="false"/>
+    <param name="debug" value="false"/>
+    <param name="self_diagnose" value="false"/>
+  </node -->
+
+  <!-- start fixed transform -->
+  <!-- node pkg="summit_static_tf" type="summit_tf" name="summit_tf_node" output="screen"/ -->
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find summit_node)/launch/rviz_imu.vcg" />
+  <!-- node name="rviz" pkg="rviz" type="rviz" / -->
+
+</launch>
+
