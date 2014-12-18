@@ -1,5 +1,0 @@
-<library path="lib/libsummit_controller_lib">
-  <class name="summit_controller/SummitControllerPlugin" 
-         type="summit_controller_ns::SummitControllerClass"           
-         base_class_type="pr2_controller_interface::Controller" />
-</library>

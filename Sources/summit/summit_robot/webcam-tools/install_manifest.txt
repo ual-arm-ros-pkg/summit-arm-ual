@@ -1,7 +1,0 @@
-/usr/local/lib/libwebcam.so.0.2.1
-/usr/local/lib/libwebcam.so
-/usr/local/bin/uvcdynctrl-0.2.1
-/usr/local/bin/uvcdynctrl
-/etc/udev/rules.d/80-uvcdynctrl.rules
-/lib/udev/uvcdynctrl
-/etc/udev/data/046d/logitech.xml

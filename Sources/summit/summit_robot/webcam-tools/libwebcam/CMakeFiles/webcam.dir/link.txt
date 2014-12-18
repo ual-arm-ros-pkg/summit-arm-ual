@@ -1,1 +1,0 @@
-/usr/bin/gcc  -fPIC    -shared -Wl,-soname,libwebcam.so.0.2.1 -o libwebcam.so.0.2.1 CMakeFiles/webcam.dir/libwebcam.c.o CMakeFiles/webcam.dir/dynctrl.c.o -lxml2 
