@@ -2,11 +2,11 @@
   <master auto="start"/>
 
   <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find summit_2dnav)/maps/robotnik/robotnik.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find summit_2dnav)/map.yaml"/>
 
   <!--- Run AMCL -->
   <include file="$(find summit_2dnav)/navigation_amcl/amcl_summit.launch" />
-  <remap from="cmd_vel" to="summit_controller/command" />
+  <remap from="/summit_controller_dspic/cmd_vel" to="/summit_controller_dspic/command" />
 
   <!--- Run EFK Filter -->
   <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
@@ -27,5 +27,13 @@
     <rosparam file="$(find summit_2dnav)/navigation_config/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find summit_2dnav)/navigation_config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find summit_2dnav)/navigation_config/base_local_planner_params.yaml" command="load" />
-  </node>
+
+           
+    <!-- Load global navigation specific parameters -->
+    <rosparam file="$(find summit_2dnav)/navigation_local/config/move_base_params.yaml" command="load" />
+    <rosparam file="$(find summit_2dnav)/navigation_local/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find summit_2dnav)/navigation_local/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find summit_2dnav)/navigation_local/config/base_local_planner_params.yaml" command="load" />
+ 
+ </node>
 </launch>

@@ -9,7 +9,6 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/summit_2dnav</url>
   <depend package="move_base"/>
-  <depend package="summit_tf"/>
   <depend package="summit_odometry"/>
 
 </package>

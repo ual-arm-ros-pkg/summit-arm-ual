@@ -3,7 +3,7 @@ raytrace_range: 3.0
 footprint: [[0.5, -0.275], [0.5, 0.275], [-0.5,0.275], [-0.5, -0.275]]
 inflation_radius: 0.55
 
-observation_sources: hokuyo_laser
+observation_sources: rplidar_laser
 
-hokuyo_laser: {sensor_frame: hokuyo_laser_link, data_type: LaserScan, topic: hokuyo_laser_topic, marking: true, clearing: true}
+rplidar_laser: {sensor_frame: rplidar_laser_link, data_type: LaserScan, topic: /rplidar_laser_topic, marking: true, clearing: true}
 

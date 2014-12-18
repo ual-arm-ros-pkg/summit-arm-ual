@@ -4,8 +4,8 @@
 
     <!-- for moving -->
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-  	<remap from="scan" to="hokuyo_laser_topic" />
-  	<remap from="cmd_vel" to="summit_controller/command" />
+        <remap from="/scan" to="/rplidar_laser_topic" />
+  	<remap from="/summit_controller_dspic/cmd_vel" to="/summit_controller/command" />
         
         <!-- Load common configuration files -->
         <rosparam file="$(find summit_2dnav)/navigation_config/move_base_params.yaml" command="load" />

@@ -4,10 +4,12 @@
   <!-- send summit_xl.urdf to param server -->
   <param name="robot_description" textfile="$(find summit_description)/urdf/summit.urdf" />
 
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
-  <!-- node pkg="robot_state_publisher" type="state_publisher" name="rob_st_pub" >
-      <remap from="/robot_description" to="/different_robot_description" />
-      <remap from="/joint_states" to="/different_joint_states" />
-  </node -->
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="FALSE"/>
+  </node>
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
 
 </launch>

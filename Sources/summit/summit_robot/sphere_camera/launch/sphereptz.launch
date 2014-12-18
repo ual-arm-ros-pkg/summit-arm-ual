@@ -5,7 +5,7 @@
   <include file="$(find usb_cam)/launch/low_res.launch" /> 
 
   <!-- start image view -->
-   <!--<node pkg="image_view" type="image_view" args="image:=/logitech_usb_webcam/image_raw" name="image_view_node" output="screen"/> -->
+   <node pkg="image_view" type="image_view" args="image:=/logitech_usb_webcam/image_raw" name="image_view_node" output="screen"/>
 
   <!-- start sphereptz node -->
   <param name="dev_video" value="/dev/video0" type="string"/>

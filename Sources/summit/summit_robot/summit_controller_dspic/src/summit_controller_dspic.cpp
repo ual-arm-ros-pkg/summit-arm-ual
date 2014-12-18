@@ -13,6 +13,17 @@
 #include <cstdlib>
 #include <std_msgs/Float32.h>
 #include <robotnik_msgs/set_odometry.h>          // service
+#include <ros/ros.h>
+#include <sensor_msgs/JointState.h>
+#include <sensor_msgs/Imu.h>
+#include <geometry_msgs/Twist.h>
+#include <std_msgs/Float64.h>
+#include <tf/transform_broadcaster.h>
+#include <nav_msgs/Odometry.h>
+#include <robotnik_msgs/set_mode.h>
+#include <robotnik_msgs/get_mode.h>
+#include <robotnik_msgs/set_odometry.h>
+#include <robotnik_msgs/ptz.h>
 
 using namespace summit_ctrl_dspic;
 
@@ -1541,7 +1552,7 @@ int main(int argc, char** argv)
 	
 	std::string base_frame_id;
 	std::string odom_frame_id;
-	pn.param<std::string>("base_frame_id", base_frame_id, "base_link");
+    pn.param<std::string>("base_frame_id", base_frame_id, "base_link");
 	pn.param<std::string>("odom_frame_id", odom_frame_id, "odom");
 
 	// Create node object
@@ -1554,7 +1565,7 @@ int main(int argc, char** argv)
 
 	tf::TransformBroadcaster tf_broadcaster;
 	// Subcscribing
-	ros::Subscriber cmd_vel_sub = n.subscribe<geometry_msgs::Twist>("/summit_controller_dspic/cmd_vel", 1, &summit_controller_dspic::cmdVelCallback, summit_controller);
+    ros::Subscriber cmd_vel_sub = n.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &summit_controller_dspic::cmdVelCallback, summit_controller);
     ros::Subscriber joy_sub = n.subscribe<sensor_msgs::Joy>("/joy", 1, &summit_controller_dspic::joystickCallback, summit_controller);
 
     // Service set_odometry

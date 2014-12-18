@@ -125,18 +125,16 @@ SummitJoy::SummitJoy():
 	nh_.param("button_kinematic_mode", button_kinematic_mode_, button_kinematic_mode_);
 	nh_.param("cmd_service_set_mode", cmd_set_mode_, cmd_set_mode_);
 	kinematic_mode_ = 1;
-
-	//bRegisteredButtonEvent = new bool(num_of_buttons_);
 	
 	for(int i = 0; i < NUM_BUTTONS; i++){
 		bRegisteredButtonEvent[i] = false;
 	}
 
-	ROS_INFO("Service PTZ = [%s]", cmd_service_ptz_.c_str());
+	// ROS_INFO("Service PTZ = [%s]", cmd_service_ptz_.c_str());
 	ROS_INFO("Service set_mode = [%s]", cmd_set_mode_.c_str());
 	ROS_INFO("Axis linear = %d", linear_);
 	ROS_INFO("Axis angular = %d", angular_);
-	ROS_INFO("Scale angular = %d", a_scale_);
+	ROS_INFO("Scale angular = %5.2f", a_scale_);
 	ROS_INFO("Deadman button = %d", dead_man_button_);
 	ROS_INFO("OUTPUT1 button %d", button_output_1_);
 	ROS_INFO("OUTPUT2 button %d", button_output_2_);
@@ -157,6 +155,9 @@ SummitJoy::SummitJoy():
 	// Request service to set kinematic mode 
 	setKinematicMode = nh_.serviceClient<robotnik_msgs::set_mode>(cmd_set_mode_);
 	
+        // Info message
+        ROS_INFO("A segfault after this line is usually caused either by bad definition of the pad yaml file or by incrorrect setting of the jsX device in the launch/summit_joy.launch file");
+
 	bOutput1 = bOutput2 = false;
 }
 
@@ -165,9 +166,10 @@ void SummitJoy::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 	geometry_msgs::Twist vel;
 	//sphereptz::ptz_state ptz;
 	//ROS_ERROR("EVENT JOY");	
+
   	// Actions dependant on dead-man button
  	if (joy->buttons[dead_man_button_] == 1) {
-		//ROS_ERROR("SummitJoy::padCallback: DEADMAN button %d", dead_man_button_);
+		// ROS_ERROR("SummitJoy::padCallback: DEADMAN button %d", dead_man_button_);
 		// Set the current velocity level
 		if ( joy->buttons[speed_down_button_] == 1 ){
 
