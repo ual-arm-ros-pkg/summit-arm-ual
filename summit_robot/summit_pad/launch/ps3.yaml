@@ -15,4 +15,4 @@ button_ptz_tilt_down: 6
 button_ptz_pan_right: 5
 button_ptz_pan_left: 7
 button_kinematic_mode: 9
-cmd_service_set_mode: /summit_controller/set_mode
+cmd_service_set_mode: /summit_controller_dspic/set_mode

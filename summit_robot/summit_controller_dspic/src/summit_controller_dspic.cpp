@@ -1593,7 +1593,7 @@ int main(int argc, char** argv)
 	// ros::Subscriber cmd_vel_sub = n.subscribe<geometry_msgs::Twist>("/summit_controller_dspic/cmd_vel", 1, &summit_controller_dspic::cmdVelCallback, summit_controller);
 	
 	// Subscribe to command topic
-	ros::Subscriber cmd_sub_ = n.subscribe<ackermann_msgs::AckermannDriveStamped>("command", 1, &summit_controller_dspic::commandCallback, summit_controller);
+	ros::Subscriber cmd_sub_ = n.subscribe<ackermann_msgs::AckermannDriveStamped>("/command", 1, &summit_controller_dspic::commandCallback, summit_controller);
 		
     ros::Subscriber joy_sub = n.subscribe<sensor_msgs::Joy>("/joy", 1, &summit_controller_dspic::joystickCallback, summit_controller);
 

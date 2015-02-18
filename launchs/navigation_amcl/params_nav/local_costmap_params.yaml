@@ -1,6 +1,6 @@
 local_costmap:
   global_frame: /odom
-  robot_base_frame: /base_link
+  robot_base_frame: /base_footprint
   update_frequency: 8.0 #default=5.0 
   publish_frequency: 3.0 #5.0
   static_map: false
@@ -15,5 +15,5 @@ local_costmap:
   raytrace_range: 4.0
 
 
-  observation_sources: laserfront_scan_sensor 
-  laserfront_scan_sensor: {sensor_frame: base_laser_link, data_type: LaserScan, topic: base_scan, marking: true, clearing: true, expected_update_rate: 1.0}
+  observation_sources: scan
+  laserfront_scan_sensor: {sensor_frame: rplidar_laser_link, data_type: LaserScan, topic: scan, marking: true, clearing: true, expected_update_rate: 1.0}
