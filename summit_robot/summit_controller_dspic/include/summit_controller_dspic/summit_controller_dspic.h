@@ -307,9 +307,9 @@ public:
 	void SetTrimmer(int channel, int offset1, int center, int offset2);
     //! Switches motors on/off
     void ToggleMotorPower(unsigned char val);
-	//! Callback - command references
-	// void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_vel);
-	void commandCallback(const ackermann_msgs::AckermannDriveStamped::ConstPtr& msg);
+    //! Callback - command references
+	 void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_vel);
+	// void commandCallback(const ackermann_msgs::AckermannDriveStamped::ConstPtr& msg);
     //! Callback - Joystick buttons - Define control mode (kinematic configuration)
 	void joystickCallback(const sensor_msgs::JoyConstPtr& msg);
     //! Set odometry service function

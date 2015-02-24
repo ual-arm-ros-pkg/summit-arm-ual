@@ -1436,15 +1436,16 @@ void summit_controller_dspic::UpdateOdometry(){
    pthread_mutex_unlock(&mutex_odometry);
 }
 
-/*!     \fn void summit_controller_dspic::commandCallback(const ackermann_msgs::AckermannDriveStamped::ConstPtr& msg)
+/*!     \fn void summit_controller_dspic::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
         * Callback - velocity references 
 */
-// void summit_controller_dspic::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
-void summit_controller_dspic::commandCallback(const ackermann_msgs::AckermannDriveStamped::ConstPtr& msg)
+void summit_controller_dspic::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
+//void summit_controller_dspic::commandCallback(const ackermann_msgs::AckermannDriveStamped::ConstPtr& msg)
+//\fn void summit_controller_dspic::cmdVelCallback(const ackermann_msgs::AckermannDriveStamped::ConstPtr& msg)
 {
-	// SetMotorReferences(double rads, double mps)
-    // this->SetMotorReferences(msg->angular.z, msg->linear.x);
-    this->SetMotorReferences(msg->drive.steering_angle, msg->drive.speed);
+    //SetMotorReferences(double rads, double mps)
+    this->SetMotorReferences(cmd_vel->angular.z, cmd_vel->linear.x);
+    //this->SetMotorReferences(msg->drive.steering_angle, msg->drive.speed);
     
     //ROS_INFO("summit_controller_dspic::commandCallback speed=%5.2f  angle=%5.2f", msg->drive.speed, msg->drive.steering_angle);
 }
@@ -1590,10 +1591,10 @@ int main(int argc, char** argv)
         
 	tf::TransformBroadcaster tf_broadcaster;
 	// Subcscribing
-	// ros::Subscriber cmd_vel_sub = n.subscribe<geometry_msgs::Twist>("/summit_controller_dspic/cmd_vel", 1, &summit_controller_dspic::cmdVelCallback, summit_controller);
+    ros::Subscriber cmd_vel_sub = n.subscribe<geometry_msgs::Twist>("/summit_controller_dspic/cmd_vel", 1, &summit_controller_dspic::cmdVelCallback, summit_controller);
 	
 	// Subscribe to command topic
-	ros::Subscriber cmd_sub_ = n.subscribe<ackermann_msgs::AckermannDriveStamped>("/command", 1, &summit_controller_dspic::commandCallback, summit_controller);
+    //ros::Subscriber cmd_sub_ = n.subscribe<ackermann_msgs::AckermannDriveStamped>("/command", 1, &summit_controller_dspic::commandCallback, summit_controller);
 		
     ros::Subscriber joy_sub = n.subscribe<sensor_msgs::Joy>("/joy", 1, &summit_controller_dspic::joystickCallback, summit_controller);
 
