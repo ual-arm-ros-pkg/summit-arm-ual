@@ -3,7 +3,7 @@
   <name>summit_joystick_teleop</name>
   <version>0.0.0</version>
   <description>The summit_joystick package allows to teleoperate
-     the summit robot in simualtion
+     the summit robot in simualation
   </description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 

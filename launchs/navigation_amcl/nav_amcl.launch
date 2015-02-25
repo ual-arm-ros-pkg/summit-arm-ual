@@ -3,12 +3,13 @@
 <launch>
 
   <!-- Run the map server -->
-  <node pkg="map_server" type="map_server" name="map_server" args="/home/summit/summit-arm-ual/Sources/summit/summit_sim/summit_2dnav/mesa.yaml" />
+  <node pkg="map_server" type="map_server" name="map_server" args="$(find launchs)/maps/mapa1.yaml" />
 
 
-
-  <!--- amcl -->
-  <node pkg="amcl" type="amcl" name="amcl" args="scan:=/scan">
+  <!-- amcl -->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+  <remap from="scan" to="/scan" />
+    <param name="scan" value="/scan" />
     <param name="use_map_topic" value="true" />
     <param name="odom_model_type" value="diff"/>
     <param name="odom_alpha5" value="0.1"/>
@@ -42,8 +43,8 @@
     <param name="resample_interval" value="1"/>
     <param name="recovery_alpha_slow" value="0.1"/> <!-- 0.001 -->
     <param name="recovery_alpha_fast" value="0"/> <!-- 0.1 -->
-    <param name="initial_pose_x" value="0.027" />
-    <param name="initial_pose_y" value="0.005" />
+    <param name="initial_pose_x" value="0" />
+    <param name="initial_pose_y" value="0" />
     <param name="initial_pose_a" value="0" /><!-- radians -->
   </node>
 
@@ -56,11 +57,11 @@
         <!-- rosparam file="params_nav/global_costmap_params.yaml" command="load"/ -->
         <!-- rosparam file="params_nav/base_local_planner_params.yaml" command="load"/ -->
 
-    <rosparam file="$(find summit_2dnav)/navigation_config/costmap_common_params.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find summit_2dnav)/navigation_config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find summit_2dnav)/navigation_config/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find summit_2dnav)/navigation_config/global_costmap_params.yaml" command="load" />
-    <rosparam file="$(find summit_2dnav)/navigation_config/base_local_planner_params.yaml" command="load" />
+
+    <rosparam file="$(find launchs)/config/move_base_params.yaml" command="load" />
+    <rosparam file="$(find launchs)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find launchs)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find launchs)/config/base_local_planner_params.yaml" command="load" />
 
 
   </node>
