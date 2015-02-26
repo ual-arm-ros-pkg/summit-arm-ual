@@ -829,7 +829,7 @@ public:
 		string s_command_type;
 		
 		private_node_handle_.param<std::string>("odom_topic", odom_topic_, "/odom");
-		private_node_handle_.param("cmd_topic_vel", cmd_topic_vel_, std::string("/agvs_controller/command"));
+		private_node_handle_.param("cmd_topic_vel", cmd_topic_vel_, std::string("/cmd_vel"));
 		private_node_handle_.param("d_lookahear_min", d_lookahear_min_, D_LOOKAHEAD_MIN);
 		private_node_handle_.param("d_lookahear_max", d_lookahear_max_, D_LOOKAHEAD_MAX);
 		private_node_handle_.param("d_dist_wheel_to_center", d_dist_wheel_to_center_, D_WHEEL_ROBOT_CENTER);
@@ -837,7 +837,7 @@ public:
 		private_node_handle_.param("kr", Kr, AGVS_DEFAULT_KR);
 		private_node_handle_.param<std::string>("position_source", position_source_, "ODOM");
 		private_node_handle_.param("desired_freq", desired_freq_, desired_freq_);
-		private_node_handle_.param<std::string>("command_type", s_command_type, COMMAND_ACKERMANN_STRING);
+		private_node_handle_.param<std::string>("command_type", s_command_type, COMMAND_TWIST_STRING /*COMMAND_ACKERMANN_STRING*/);
 		private_node_handle_.param<std::string>("target_frame", target_frame_, "/base_footprint");
 		
 		//private_node_handle_.param<std::string>("name_sc_enable_frot_laser_", name_sc_enable_front_laser_, "/s3000_laser_front/enable_disable");

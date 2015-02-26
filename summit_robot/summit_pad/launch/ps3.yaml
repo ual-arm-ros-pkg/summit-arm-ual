@@ -16,3 +16,5 @@ button_ptz_pan_right: 5
 button_ptz_pan_left: 7
 button_kinematic_mode: 9
 cmd_service_set_mode: /summit_controller_dspic/set_mode
+cmd_topic_ptz: /sphereptz/command_ptz
+
