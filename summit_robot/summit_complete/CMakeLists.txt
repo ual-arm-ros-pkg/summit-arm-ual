@@ -16,3 +16,5 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
+add_executable(simple_navigation_goals src/simple_navigation_goals.cpp)
+target_link_libraries(simple_navigation_goals ${catkin_LIBRARIES})

@@ -45,7 +45,7 @@ summit_controller_dspic::summit_controller_dspic( std::string port ) {
         dsPic_data.odometry_yaw = 0.0;
 	pthread_mutex_init(&mutex_odometry, NULL); //Initialization for odometry's mutex
 	iErrorType = DSPIC_ERROR_NONE;
-    active_kinematic_mode_ = SINGLE_ACKERMANN; //DUAL_ACKERMANN_INVERTED; // SINGLE_ACKERMANN;  // Default kinematic mode
+    active_kinematic_mode_ = DUAL_ACKERMANN_INVERTED; //DUAL_ACKERMANN_INVERTED; // SINGLE_ACKERMANN;  // Default kinematic mode
 
 	// Could be read from parameter yaml file
 	dsPic_data.offset1[DSPIC_FWD_DIRECTION] = 5;
@@ -843,8 +843,8 @@ int summit_controller_dspic::SendSetMotorReferences(double rad, double mps){
        sprintf(cMsg,"%s,0.0,0.0,0.0\r", SET_MOTOR_REFERENCES);
 
 	crc = ComputeCRC(cMsg, 32);
-	//ROS_INFO("summit_controller_dspic - Motor References %s,%2.3f,%2.3f,%d\r", SET_MOTOR_REFERENCES, rad, mps, crc);
-	//ROS_INFO("summit_controller_dspic::SendSetMotorReferences: Sending %s,%2.3f,%2.3f,%d to device", SET_MOTOR_REFERENCES, rad, mps, crc);
+	ROS_INFO("summit_controller_dspic - Motor References %s,%2.3f,%2.3f,%d\r", SET_MOTOR_REFERENCES, rad, mps, crc);
+	ROS_INFO("summit_controller_dspic::SendSetMotorReferences: Sending %s,%2.3f,%2.3f,%d to device", SET_MOTOR_REFERENCES, rad, mps, crc);
 
     // Sends the message
 	if(serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK) {
@@ -1656,7 +1656,7 @@ int main(int argc, char** argv)
 		
 		//publish the message
 		odom_pub.publish(odom);
-		ROS_INFO("Odometria -> x = %f, y = %f", odom.pose.pose.position.x, odom.pose.pose.position.y);
+		//ROS_INFO("Odometria -> x = %f, y = %f", odom.pose.pose.position.x, odom.pose.pose.position.y);
 
 		// ******************************************************************************************
 		//publish battery

@@ -29,9 +29,8 @@
   <!-- start summit_controller node -->
   <!-- node pkg="summit_controller_dspic" type="summit_controller_dspic" name="summit_controller_dspic" output="screen"/ -->
   <include file="$(find summit_controller_dspic)/launch/summit_controller_dspic.launch"/>
-
-  <!-- start summit_joystick node -->
-  <!-- include file="$(find summit_joystick)/summit_joy.launch" / --> 
-  <include file="$(find summit_pad)/launch/summit_pad.launch"/>
+ 
+  <!-- start summit_joystick node --> 
+  <!-- include file="$(find summit_pad)/launch/summit_pad.launch"/ -->
 
 </launch>

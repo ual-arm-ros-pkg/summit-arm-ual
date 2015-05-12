@@ -4,11 +4,11 @@
   <!-- start purepursuit node -->
   <node pkg="robotnik_pp_planner" type="robotnik_pp_planner_node" name="robotnik_pp_planner" output="screen">
 	<!-- Options: MAP, ODOM -->	
-        <param name="position_source" value="ODOM" type="string"/>
-	<param name="target_frame" value="/base_footprint" type="string"/>
-	<param name="d_lookahear_min" value="0.4"/>
+        <param name="position_source" value="MAP" type="string"/>
+	<param name="target_frame" value="base_footprint" type="string"/>
+	<param name="d_lookahead_min" value="0.4"/>
   	<param name="kr" value="0.2"/>
-	<param name="desired_freq" value="50.0"/>
+	<param name="desired_freq" value="30.0"/>
 
 	<!--for Ackerman-->
 	<!--param name="d_dist_wheel_to_center" value="1.0"/-->
@@ -20,4 +20,3 @@
   </node>
 
 </launch>
-

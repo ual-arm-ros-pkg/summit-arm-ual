@@ -16,6 +16,7 @@
     <param name="use_mag" type="bool" value="true"/>            
     <!-- Set fixed frame -->
     <param name="fixed_frame" value="odom"/>
+    <!-- param name="fixed_frame" value="base_link"/ -->
     <param name="constant_dt" type="double" value="0.0"/>       
 
   </node> 

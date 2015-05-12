@@ -2,18 +2,18 @@
 
 <launch>
 <!-- Run the map server -->
-<node pkg="map_server" type="map_server" name="map_server" args="$(find launchs)/maps/mapa1.yaml" />
+<node pkg="map_server" type="map_server" name="map_server" args="$(find launchs)/maps/labo.yaml" />
 
 
 
 <!--- amcl -->
 <node pkg="amcl" type="amcl" name="amcl" output="screen">
-<remap from="scan" to="/scan" />
+<!-- remap from="scan" to="/scan" / -->
   <param name="scan" value="/scan" />
   <param name="use_map_topic" value="true" />
   <param name="odom_model_type" value="diff"/>
   <param name="odom_alpha5" value="0.1"/>
-  <param name="transform_tolerance" value="0.2" /> <!--"0.9" />-->
+  <param name="transform_tolerance" value="2.2" /> <!--"0.9" />-->
   <param name="gui_publish_rate" value="10.0"/>
   <param name="laser_max_beams" value="30"/>
   <param name="min_particles" value="500"/> <!--"2000" />-->
@@ -43,9 +43,9 @@
   <param name="resample_interval" value="1"/>
   <param name="recovery_alpha_slow" value="0.1"/> <!-- 0.001 -->
   <param name="recovery_alpha_fast" value="0"/> <!-- 0.1 -->
-  <param name="initial_pose_x" value="0" />
-  <param name="initial_pose_y" value="0" />
-  <param name="initial_pose_a" value="0" /><!-- radians -->
+  <!-- param name="initial_pose_x" value="0" / -->
+  <!-- param name="initial_pose_y" value="0" / -->
+  <!-- param name="initial_pose_a" value="0" / --><!-- radians -->
 
 </node>
 </launch>
