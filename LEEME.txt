@@ -1,4 +1,0 @@
-- Estos directorios son compatibles con catkin
-- Usar enlazando con symlinks a catkin_ws/src/
-
-
