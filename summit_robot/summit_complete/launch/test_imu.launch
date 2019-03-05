@@ -3,7 +3,7 @@
 
   <!-- start imu node -->
   <!-- node pkg="microstrain_3dmgx2" type="imu_node" name="imu_node" output="screen"/ -->
-  <include file="$(find microstrain_3dmgx2_imu)/microstrain_3dmgx2.launch" />
+  <include file="$(find microstrain_3dmgx2_imu)/launch/microstrain_3dmgx2.launch" />
 
   <!-- robot_pose_ekf needs at least 1 odom input -->
   <!-- node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
@@ -20,7 +20,7 @@
   <!-- start fixed transform -->
   <!-- node pkg="summit_static_tf" type="summit_tf" name="summit_tf_node" output="screen"/ -->
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find summit_node)/launch/rviz_imu.vcg" />
+<!--  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find summit_node)/launch/rviz_imu.vcg" />  -->
   <!-- node name="rviz" pkg="rviz" type="rviz" / -->
 
 </launch>
