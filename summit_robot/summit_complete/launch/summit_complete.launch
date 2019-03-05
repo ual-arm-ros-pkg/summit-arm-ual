@@ -2,29 +2,30 @@
 <launch>
 
   <!-- start rplidar node -->
-  <include file="$(find rplidar_ros)launch/rplidar.launch"/>
+ <!-- <include file="$(find rplidar_ros)launch/rplidar.launch"/> -->
 
   <!-- start robot_state_publisher - publish fixed transforms, load robot model to param server -->
   <include file="$(find summit_description)/launch/summit_estado.launch"/>
 
   <!-- start sound node -->
-  <node pkg="sound_play" type="soundplay_node.py" name="sound_play_node" output="screen"/>
+  <!--<node pkg="sound_play" type="soundplay_node.py" name="sound_play_node" output="screen"/> -->
+
   <!-- rosrun sound_play say.py 'READY'  -->
-  <node pkg="sound_play" type="say.py" name="sound_play_say" args="'SUMMIT, READY'" output="screen"/>
+  <!--<node pkg="sound_play" type="say.py" name="sound_play_say" args="'SUMMIT, READY'" output="screen"/>  -->
   <!-- node pkg="sound_play" type="play.py" name="sound_play_play" args="Hold.wav" output="screen"/ -->
 
   <!-- start axis camera -->
   <!-- include file="$(find axis_camera)/launch/axis.launch"/ -->
 
   <!-- start sphere camera nodes -->
-  <include file="$(find sphere_camera)/launch/sphereptz.launch"/>
+  <!-- <include file="$(find sphere_camera)/launch/sphereptz.launch"/>  -->
 
 
   <!-- start GPS -->
   <!-- include file="$(find summit_complete)/launch/gpsd_client.launch"/ -->
 
   <!-- start robotnik_arduimu and madgwick filter -->
-  <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu_madgwick.launch"/>
+  <!-- <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu_madgwick.launch"/>  -->
 
   <!-- start summit_controller node -->
   <!-- node pkg="summit_controller_dspic" type="summit_controller_dspic" name="summit_controller_dspic" output="screen"/ -->
