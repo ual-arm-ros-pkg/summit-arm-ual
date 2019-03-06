@@ -1,5 +1,10 @@
 summit:
 
+  joint_read_state_controller:
+  # Publish all joint states -----------------------------------
+    type: joint_state_controller/JointStateController 
+    publish_rate: 100.0
+
 # Velocity controllers
   joint_blw_velocity_controller:
     type: velocity_controllers/JointVelocityController
@@ -50,7 +55,3 @@ summit:
     type: effort_controllers/JointPositionController
     joint: joint_camera_tilt
     pid: {p: 100.0, i: 0.01, d: 50.0}
-
-  joint_read_state_controller:
-    type: joint_state_controller/JointStateController 
-    publish_rate: 100.0
