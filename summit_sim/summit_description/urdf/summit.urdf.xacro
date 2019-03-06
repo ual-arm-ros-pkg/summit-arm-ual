@@ -117,14 +117,27 @@
   </joint>
 
   <transmission name="joint_blw_trans_dir">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_back_left_wheel_dir">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_blw_motor_dir">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>100.0</mechanicalReduction>
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
+  </transmission>
+<!--
+  <transmission name="joint_blw_trans_dir">
 	<type>transmission_interface/SimpleTransmission</type>
     <joint name="joint_back_left_wheel_dir" />
     <actuator name="joint_blw_motor_dir">
 	  <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>100.0</mechanicalReduction>
-	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
+	   motorTorqueConstant>1</motorTorqueConstant 
 	</actuator>	      
   </transmission>
+-->
 
 
   <!-- BACK LEFT WHEEL -->
@@ -161,14 +174,28 @@
   </joint>
 
   <transmission name="joint_blw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_back_left_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_blw_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>100.0</mechanicalReduction>
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
+  </transmission>
+
+<!--
+  <transmission name="joint_blw_trans">
 	 <type>transmission_interface/SimpleTransmission</type>
      <joint name="joint_back_left_wheel" />
      <actuator name="joint_blw_motor">
 	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
         <mechanicalReduction>100.0</mechanicalReduction>
-     	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
+     	< motorTorqueConstant>1</motorTorqueConstant >  
 	 </actuator>       
   </transmission>
+-->
 
 <!-- DIRECTION BACK RIGHT        -->
 <!-- =========================== -->
@@ -203,15 +230,17 @@
     <limit effort="100.0" velocity="3.0" lower="-0.7854" upper="0.7854"/>
     <joint_properties damping="0.2" friction="0.1"/>
   </joint>
-  
+
   <transmission name="joint_brw_trans_dir">
-	<type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_back_right_wheel_dir" />
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_back_right_wheel_dir">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
     <actuator name="joint_brw_motor_dir">
-	  <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>100.0</mechanicalReduction>
-	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
-	</actuator>	      
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
   </transmission>
 
 
@@ -249,13 +278,15 @@
   </joint>
 
   <transmission name="joint_brw_trans">
-	 <type>transmission_interface/SimpleTransmission</type>
-     <joint name="joint_back_right_wheel" />
-     <actuator name="joint_brw_motor">
-	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-        <mechanicalReduction>1.0</mechanicalReduction>
-     	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
-	 </actuator>       
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_back_right_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_brw_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>100.0</mechanicalReduction>
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
   </transmission>
 
 <!-- DIRECTION FORWARD LEFT      -->
@@ -292,16 +323,19 @@
     <limit effort="100.0" velocity="3.0" lower="-0.7854" upper="0.7854"/>
     <joint_properties damping="0.2" friction="0.1"/>
   </joint>
-  
+
   <transmission name="joint_flw_trans_dir">
-	<type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_front_left_wheel_dir" />
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_front_left_wheel_dir">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
     <actuator name="joint_flw_motor_dir">
-	  <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>100.0</mechanicalReduction>
-	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
-	</actuator>	      
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
   </transmission>
+  
 
   <!-- FRONT LEFT WHEEL (GREY) -->
   <link name="front_left_wheel">
@@ -337,13 +371,15 @@
   </joint>
 
   <transmission name="joint_flw_trans">
-	 <type>transmission_interface/SimpleTransmission</type>
-     <joint name="joint_front_left_wheel" />
-     <actuator name="joint_flw_motor">
-	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-        <mechanicalReduction>1.0</mechanicalReduction>
-     	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
-	 </actuator>       
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_front_left_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_flw_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>100.0</mechanicalReduction>
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
   </transmission>
 
 
@@ -381,17 +417,19 @@
     <limit effort="100.0" velocity="3.0" lower="-0.7854" upper="0.7854"/>
     <joint_properties damping="0.2" friction="0.1"/>
   </joint>
-    
-  <transmission name="joint_frw_trans_dir">
-	<type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_front_right_wheel_dir" />
-    <actuator name="joint_frw_motor_dir">
-	  <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>100.0</mechanicalReduction>
-	  <!-- motorTorqueConstant>1</motorTorqueConstant -->
-	</actuator>	      
-  </transmission>
 
+  <transmission name="joint_frw_trans_dir">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_front_right_wheel_dir">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_frw_motor_dir">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>100.0</mechanicalReduction>
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
+  </transmission>
+    
 
   <!-- FRONT RIGHT WHEEL (GREY) -->
   <link name="front_right_wheel">
@@ -427,28 +465,27 @@
   </joint>
 
   <transmission name="joint_frw_trans">
-	 <type>transmission_interface/SimpleTransmission</type>
-     <joint name="joint_front_right_wheel" />
-     <actuator name="joint_frw_motor">
-	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-        <mechanicalReduction>1.0</mechanicalReduction>
-     	<!-- motorTorqueConstant>1</motorTorqueConstant -->  
-	 </actuator>       
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_front_right_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_frw_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>100.0</mechanicalReduction>
+      <!--motorTorqueConstant>1</motorTorqueConstant-->
+    </actuator>
   </transmission>
 
-
-
-
-
+ 
   <!-- LASER SENSOR -->
   <joint name="laser_joint" type="fixed">
      <axis xyz="0 1 0" />
      <origin xyz="0 0 0.24" rpy="0 0 0"/>
      <parent link="base_footprint"/>
-     <child link="laser_link"/>
+     <child link="hokuyo_laser_link"/>
   </joint>
 
-  <link name="laser_link" type="laser">
+  <link name="hokuyo_laser_link" type="laser">
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -509,16 +546,19 @@
      <limit effort="100.0" velocity="100.0" lower="-3.1416" upper="3.1416"/>
      <joint_properties damping="0.1" friction="0.1"/>
   </joint>  
-  
+
   <transmission name="joint_pan_trans">
-	 <type>transmission_interface/SimpleTransmission</type>
-     <joint name="joint_camera_pan" />
-     <actuator name="pan_motor">
-	   <hardwareInterface>EffortJointInterface</hardwareInterface>
-       <mechanicalReduction>1.0</mechanicalReduction>
-     </actuator>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_camera_pan">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="pan_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1.0</mechanicalReduction>
+    </actuator>
   </transmission>
- 
+  
+
   <link name="camera_tilt_link">
      <inertial>
        <mass value="0.1" />
@@ -536,16 +576,18 @@
      <limit effort="100.0" velocity="100.0" lower="-1.5708" upper="1.5708"/>
      <joint_properties damping="0.1" friction="0.1"/>
   </joint>
-  
+
   <transmission name="joint_tilt_trans">
-	 <type>transmission_interface/SimpleTransmission</type>
-     <joint name="joint_camera_tilt" />
-     <actuator name="tilt_motor">
-	   <hardwareInterface>EffortJointInterface</hardwareInterface>
-       <mechanicalReduction>1.0</mechanicalReduction>
-     </actuator>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_camera_tilt">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="tilt_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1.0</mechanicalReduction>
+    </actuator>
   </transmission>
-    
+      
 
 </robot>
 
