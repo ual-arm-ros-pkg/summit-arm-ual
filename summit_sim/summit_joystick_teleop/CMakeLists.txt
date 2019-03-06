@@ -81,7 +81,7 @@ include_directories(
 add_executable(summit_joystick_teleop src/summit_joystick_teleop.cpp)
 
 add_dependencies(summit_joystick_teleop robotnik_msgs_generate_messages_cpp)
-add_dependencies(summit_joystick_teleop summit_joystick_teleop_generate_messages_cpp)
+#add_dependencies(summit_joystick_teleop summit_joystick_teleop_generate_messages_cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
