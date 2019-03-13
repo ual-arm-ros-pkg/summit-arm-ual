@@ -9,10 +9,10 @@
 
   <!-- Parameters -->  
   <param name="cmd_topic_vel" value="/cmd_vel" type="string"/>
-  <param name="cmd_topic_ptz" value="/sphereptz/command_ptz" type="string"/>
+  <!--param name="cmd_topic_ptz" value="/sphereptz/command_ptz" type="string"/-->
   <param name="cmd_service_set_mode" value="/summit_controller_dspic/set_mode" type="string"/>
     
-  <rosparam command="load" file="$(find summit_pad)/launch/ps3.yaml" />
+  <rosparam command="load" file="$(find summit_pad)/config/ps3.yaml" />
   <node name="summit_joystick_teleop" pkg="summit_joystick_teleop" type="summit_joystick_teleop" output="screen"/>
 </launch>
 
