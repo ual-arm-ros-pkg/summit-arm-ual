@@ -1,5 +1,6 @@
 robotnik_arduimu:
-  port:  /dev/ttyUSB_IMU
+#  port:  /dev/ttyUSB_IMU
+  port:  /dev/ttyUSB1
   base_frame_id: base_link
   imu_frame_id: imu_link
   # calibrate_mag.m
