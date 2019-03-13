@@ -1,0 +1,3 @@
+summit_controller_dspic:
+  port:  /dev/ttyS0
+
