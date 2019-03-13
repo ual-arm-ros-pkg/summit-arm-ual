@@ -155,11 +155,14 @@
   
   <gazebo>
     <plugin name="ros_imu" filename="libgazebo_ros_imu.so">
-       <robotNamespace>/summit</robotNamespace>
-       <topicName>imu_data</topicName>
-		<bodyName>imu_link </bodyName>
-		<serviceName>/imu_service</serviceName>
-        <gaussianNoise>0.005</gaussianNoise>		
+      <alwaysOn>true</alwaysOn>
+      <robotNamespace>/summit</robotNamespace>
+        <bodyName>base_footprint</bodyName>
+        <topicName>imu_data</topicName>
+	<serviceName>/imu_service</serviceName>
+        <gaussianNoise>0.005</gaussianNoise>	
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>	
     </plugin>
   </gazebo>
   
