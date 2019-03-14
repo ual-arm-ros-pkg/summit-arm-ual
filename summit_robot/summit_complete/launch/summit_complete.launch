@@ -1,11 +1,32 @@
 <?xml version="1.0"?>
 <launch>
 
+  <!-- 
+	start robot_state_publisher - publish fixed transforms, load robot model to param server 
+  -->
+  <include file="$(find summit_description)/launch/summit_estado.launch"/>
+
+  <!-- 
+	start summit_controller node 
+  -->
+  <!-- node pkg="summit_controller_dspic" type="summit_controller_dspic" name="summit_controller_dspic" output="screen"/ -->
+  <include file="$(find summit_controller_dspic)/launch/summit_controller_dspic.launch"/>
+ 
+  <!-- 
+	start summit_joystick node 
+  --> 
+  <include file="$(find summit_pad)/launch/summit_pad.launch"/>
+
+  <!-- 
+	start robotnik_arduimu 
+  -->
+  <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu.launch"/>
+
+
+  <!-- Have not been tested... yet!! -->
+
   <!-- start rplidar node -->
  <!-- <include file="$(find rplidar_ros)launch/rplidar.launch"/> -->
-
-  <!-- start robot_state_publisher - publish fixed transforms, load robot model to param server -->
-  <include file="$(find summit_description)/launch/summit_estado.launch"/>
 
   <!-- start sound node -->
   <!--<node pkg="sound_play" type="soundplay_node.py" name="sound_play_node" output="screen"/> -->
@@ -26,12 +47,5 @@
 
   <!-- start robotnik_arduimu and madgwick filter -->
   <!-- <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu_madgwick.launch"/>  -->
-
-  <!-- start summit_controller node -->
-  <!-- node pkg="summit_controller_dspic" type="summit_controller_dspic" name="summit_controller_dspic" output="screen"/ -->
-  <include file="$(find summit_controller_dspic)/launch/summit_controller_dspic.launch"/>
- 
-  <!-- start summit_joystick node --> 
-  <!-- include file="$(find summit_pad)/launch/summit_pad.launch"/ -->
 
 </launch>
