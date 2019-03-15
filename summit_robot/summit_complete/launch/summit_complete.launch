@@ -22,6 +22,11 @@
   -->
   <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu.launch"/>
 
+  <!--
+        start Hokuyo Laser (Ethernet)
+  -->
+  <include file="$(find summit_complete)/launch/hokuyo.launch"/>
+
 
   <!-- Have not been tested... yet!! -->
 
