@@ -4,7 +4,7 @@
   <!-- 
 	start robot_state_publisher - publish fixed transforms, load robot model to param server 
   -->
-  <include file="$(find summit_description)/launch/summit_estado.launch"/>
+  <include file="$(find summit_description)/launch/summit_state.launch"/>
 
   <!-- 
 	start summit_controller node 
