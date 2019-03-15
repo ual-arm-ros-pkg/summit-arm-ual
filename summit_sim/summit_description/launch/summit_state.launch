@@ -4,11 +4,6 @@
   <arg name="model" 
   	   default="$(find summit_description)/urdf/summit.urdf.xacro"/>
 
-  <arg name="gui" 
-  	   default="true" />
-
-  <arg name="rvizconfig" 
-  	   default="$(find summit_complete)/rviz/summit_complete.rviz" />
 
   <!-- ###################################################################### -->
   <!-- 
@@ -17,28 +12,25 @@
   <param name="robot_description" 
   		   command="$(find xacro)/xacro --inorder $(arg model)" />
 
-   <!-- Setting gui parameter to true for display joint slider -->
-  <param name="use_gui" 
-  		   value="$(arg gui)"/>
   <!-- ###################################################################### -->
 
+<!--
+    Reads the robot model description, finds all joints, and publishes joint values to all nonfixed joints. 
+  -->
   <node name="joint_state_publisher" 
     		pkg="joint_state_publisher" 
     		type="joint_state_publisher" />
 
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+   <!-- Starting robot state publish which will publish tf 
+    	Reads the current robot joint states and publishes the 3D poses of each robot link using the kinematics
+    	tree build from the URDF. The 3D pose of the robot is published as ROS tf (transform). 
+    -->
+  <node name="robot_state_publisher" 
+            pkg="robot_state_publisher" 
+            type="state_publisher"/>
 
-  <!-- Show in Rviz -->
-  <node name="rviz" 
-    		pkg="rviz" 
-    		type="rviz" 
-    		args="-d $(arg rvizconfig)" 
-    		required="false" />
 
 
-  <!-- node pkg="robot_state_publisher" type="state_publisher" name="rob_st_pub" >
-      <remap from="/robot_description" to="/different_robot_description" />
-      <remap from="/joint_states" to="/different_joint_states" />
-  </node -->
+
 
 </launch>
