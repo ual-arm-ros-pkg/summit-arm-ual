@@ -27,6 +27,11 @@
   -->
   <include file="$(find summit_complete)/launch/hokuyo.launch"/>
 
+  <!--
+       rosservice call to activate SINGLE_ACKERMANN mode 
+  -->
+  <node pkg="rosservice" type="rosservice" name="set_ackerman_mode" args="call /summit_controller_dspic/set_mode 'mode: 1'" />
+
 
   <!-- Have not been tested... yet!! -->
 
