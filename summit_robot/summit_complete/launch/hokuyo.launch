@@ -6,11 +6,13 @@
 
     <param name="ip_address" value="192.168.0.50" />
     <param name="frame_id" value="/hokuyo_laser_link"/>
+    <param name="calibrate_time" value="false" />
+    <param name="publish_intensity" value="false" />
+    <param name="publish_multiecho" value="false" />
+    <param name="angle_min" value="-2.094395102" />
+    <param name="angle_max" value="2.094395102" />
 
   </node>
-
-
-
 
 
 </launch>
