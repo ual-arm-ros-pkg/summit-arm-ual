@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="summit" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
+<robot name="summit" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
@@ -8,8 +8,8 @@
   <!-- Robot mechanical and motor parameters -->
   <xacro:property name="PI" value="3.1415926535897931"/>
   <xacro:property name="wheel_offset_x" value="0.185" />    <!-- x,y,z in base_footprint CS -->
-  <xacro:property name="wheel_offset_y" value="0.105" /> 
-  <xacro:property name="wheel_offset_z" value="0.0" /> 
+  <xacro:property name="wheel_offset_y" value="0.105" />
+  <xacro:property name="wheel_offset_z" value="0.0" />
   <xacro:property name="steer_joint_effort_limit" value="100.0" />
   <xacro:property name="steer_joint_velocity_limit" value="3.0" />
   <xacro:property name="steer_joint_damping" value="0.2" />
@@ -19,16 +19,16 @@
   <xacro:property name="wheel_joint_effort_limit" value="100.0" />
   <xacro:property name="wheel_joint_damping" value="0.0" />
   <xacro:property name="wheel_joint_friction" value="0.0" />
-  
+
   <xacro:property name="wheel_joint_velocity_limit" value="200.0" />
   <xacro:property name="wheel_mechanical_reduction" value="1.0" />
   <xacro:property name="wheel_width" value="0.175" />
-  <xacro:property name="ptz_joint_effort_limit" value="100.0" /> 
-  <xacro:property name="ptz_joint_velocity_limit" value="100.0"/>  
+  <xacro:property name="ptz_joint_effort_limit" value="100.0" />
+  <xacro:property name="ptz_joint_velocity_limit" value="100.0"/>
   <xacro:property name="ptz_joint_friction" value="0.1" />
   <xacro:property name="ptz_joint_damping" value="0.1" />
   <xacro:property name="ptz_mechanical_reduction" value="1.0" />
- 
+
   <!-- BASE FOOTPRINT -->
 
   <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin,
@@ -73,12 +73,12 @@
        </geometry>
     </visual>
     <collision>
-       <origin xyz="0 0 0.06" rpy="0 0 0 " />
+       <origin xyz="0 0 0" rpy="0 0 0 " />
        <geometry>
          <mesh filename="package://summit_description/meshes/summit_chassis.dae"/>
 	     <!-- box size = "0.56 0.4 0.2"/ -->
        </geometry>
-    </collision>     
+    </collision>
   </link>
 
 <!-- DIRECTION BACK LEFT         -->
@@ -134,8 +134,8 @@
     <actuator name="joint_blw_motor_dir">
 	  <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>100.0</mechanicalReduction>
-	   motorTorqueConstant>1</motorTorqueConstant 
-	</actuator>	      
+	   motorTorqueConstant>1</motorTorqueConstant
+	</actuator>
   </transmission>
 -->
 
@@ -144,11 +144,11 @@
   <link name="back_left_wheel">
     <inertial>
       <mass value="1.023" />
-      <origin xyz="0 0 0" /> 
+      <origin xyz="0 0 0" />
       <inertia  ixx="0.0027" ixy="0.0"  ixz="0.0"  iyy="0.0039"  iyz="0.0"  izz="0.0027" />
     </inertial>
     <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" /> 
+       <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
 	 <mesh filename="package://summit_description/meshes/wheel.dae"/>
        </geometry>
@@ -167,7 +167,7 @@
   <joint name="joint_back_left_wheel" type="continuous">
     <parent link="back_left_wheel_dir"/>
     <child link="back_left_wheel"/>
-    <origin xyz="0.0 0.060 0" rpy="0 0 0" /> 
+    <origin xyz="0.0 0.060 0" rpy="0 0 0" />
     <axis xyz="0 1 0" rpy="0 0 0" />
     <limit effort="100.0" velocity="200.0"/>
     <joint_properties damping="0.0" friction="0.0"/>
@@ -192,8 +192,8 @@
      <actuator name="joint_blw_motor">
 	    <hardwareInterface>VelocityJointInterface</hardwareInterface>
         <mechanicalReduction>100.0</mechanicalReduction>
-     	< motorTorqueConstant>1</motorTorqueConstant >  
-	 </actuator>       
+     	< motorTorqueConstant>1</motorTorqueConstant >
+	 </actuator>
   </transmission>
 -->
 
@@ -217,7 +217,7 @@
        <!-- collision origin is defined w.r.t. link local coord. system -->
        <origin xyz="0 0 0" rpy="0 0 0 " />
        <geometry>
-         <cylinder radius="0.015" length="0.025"/>      
+         <cylinder radius="0.015" length="0.025"/>
        </geometry>
     </collision>
   </link>
@@ -252,7 +252,7 @@
       <inertia  ixx="0.0027" ixy="0.0"  ixz="0.0"  iyy="0.0039"  iyz="0.0"  izz="0.0027" />
     </inertial>
     <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" /> 
+       <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
          <mesh filename="package://summit_description/meshes/wheel.dae"/>
        </geometry>
@@ -261,7 +261,7 @@
         </material>
     </visual>
     <collision>
-       <origin xyz="0 0 0" rpy="0 0 0" /> 
+       <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
          <mesh filename="package://summit_description/meshes/wheel.dae"/>
        </geometry>
@@ -271,7 +271,7 @@
   <joint name="joint_back_right_wheel" type="continuous">
     <parent link="back_right_wheel_dir"/>
     <child link="back_right_wheel"/>
-    <origin xyz="0.0 -0.060 0" rpy="0 0 0" /> 
+    <origin xyz="0.0 -0.060 0" rpy="0 0 0" />
     <axis xyz="0 1 0" rpy="0 0 0" />
     <limit effort="100.0" velocity="200.0"/>
     <joint_properties damping="0.0" friction="0.0"/>
@@ -335,7 +335,7 @@
       <!--motorTorqueConstant>1</motorTorqueConstant-->
     </actuator>
   </transmission>
-  
+
 
   <!-- FRONT LEFT WHEEL (GREY) -->
   <link name="front_left_wheel">
@@ -345,7 +345,7 @@
       <inertia  ixx="0.0027" ixy="0.0"  ixz="0.0"  iyy="0.0039"  iyz="0.0"  izz="0.0027" />
     </inertial>
     <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" /> 
+       <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
          <mesh filename="package://summit_description/meshes/wheel.dae"/>
        </geometry>
@@ -354,7 +354,7 @@
       	</material>
     </visual>
     <collision>
-       <origin xyz="0 0 0" rpy="0 0 0" /> 
+       <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
          <mesh filename="package://summit_description/meshes/wheel.dae"/>
        </geometry>
@@ -364,7 +364,7 @@
   <joint name="joint_front_left_wheel" type="continuous">
     <parent link="front_left_wheel_dir"/>
     <child link="front_left_wheel"/>
-    <origin xyz="0.0 0.060 0" rpy="0 0 0" /> 
+    <origin xyz="0.0 0.060 0" rpy="0 0 0" />
     <axis xyz="0 1 0" rpy="0 0 0" />
     <limit effort="100.0" velocity="200.0"/>
     <joint_properties damping="0.0" friction="0.0"/>
@@ -384,7 +384,7 @@
 
 
 <!-- DIRECTION FORWARD RIGHT     -->
-<!-- =========================== -->
+<!-- =================================================================== -->
 
   <link name="front_right_wheel_dir">
     <inertial>
@@ -429,8 +429,8 @@
       <!--motorTorqueConstant>1</motorTorqueConstant-->
     </actuator>
   </transmission>
-    
 
+  <!-- =================================================================== -->
   <!-- FRONT RIGHT WHEEL (GREY) -->
   <link name="front_right_wheel">
     <inertial>
@@ -439,7 +439,7 @@
       <inertia  ixx="0.0027" ixy="0.0"  ixz="0.0"  iyy="0.0039"  iyz="0.0"  izz="0.0027" />
     </inertial>
     <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" /> 
+       <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
          <mesh filename="package://summit_description/meshes/wheel.dae"/>
        </geometry>
@@ -448,7 +448,7 @@
       	</material>
     </visual>
     <collision>
-       <origin xyz="0 0 0" rpy="0 0 0" /> 
+       <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
          <mesh filename="package://summit_description/meshes/wheel.dae"/>
        </geometry>
@@ -458,7 +458,7 @@
   <joint name="joint_front_right_wheel" type="continuous">
     <parent link="front_right_wheel_dir"/>
     <child link="front_right_wheel"/>
-    <origin xyz="0.0 -0.060 0" rpy="0 0 0" /> 
+    <origin xyz="0.0 -0.060 0" rpy="0 0 0" />
     <axis xyz="0 1 0" rpy="0 0 0" />
     <limit effort="100.0" velocity="200.0"/>
     <joint_properties damping="0.0" friction="0.0"/>
@@ -476,36 +476,66 @@
     </actuator>
   </transmission>
 
- 
+  <!-- =================================================================== -->
+  <!-- SOPORTE LASER  -->
+  <joint name="base_laser_joint" type="fixed">
+    <origin xyz="-0.25 0 0.29" rpy="0 0 0"/>
+    <parent link="base_footprint"/>
+    <child link="hokuyo_base_link"/>
+  </joint>
+
+  <link name="hokuyo_base_link">
+    <visual>
+      <origin xyz="-0.02 -0.03 -0.01" rpy="${PI/2} 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://summit_description/meshes/soporte_laser.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.02 -0.03 -0.01" rpy="${PI/2} 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://summit_description/meshes/soporte_laser.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+    </inertial>
+  </link>
+
+  <!-- =================================================================== -->
   <!-- LASER SENSOR -->
   <joint name="laser_joint" type="fixed">
-     <axis xyz="0 1 0" />
-     <origin xyz="0 0 0.24" rpy="0 0 0"/>
-     <parent link="base_footprint"/>
+     <origin xyz="0 0 0.05" rpy="0 0 0"/>
+     <parent link="hokuyo_base_link"/>
      <child link="hokuyo_laser_link"/>
   </joint>
 
   <link name="hokuyo_laser_link" type="laser">
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-	     <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="-0.02 -0.025 0" rpy="${PI/2} 0 ${PI/2}"/>
       <geometry>
-        <mesh filename="package://summit_description/meshes/hokuyo-utm30-lx.dae"/>
+        <mesh filename="package://summit_description/meshes/Hokuyo_UST-10LX.STL" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
+    <collision>
+      <origin xyz="-0.02 -0.025 0" rpy="${PI/2} 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://summit_description/meshes/Hokuyo_UST-10LX.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
     <inertial>
       <mass value="1e-5" />
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
   </link>
-  
+
+  <!-- =================================================================== -->
   <!-- AXIS PTZ CAMERA WITH PAN AND TILT -->
+  
+  <!--
   <link name="camera_base_link">
      <inertial>
        <mass value="0.1" />
@@ -519,25 +549,23 @@
       </geometry>
     </visual>
   </link>
-  
+
   <joint name="joint_camera" type="fixed">
      <axis xyz="0 1 0" />
-     <!--origin xyz="0.180 0.0 0.270"/-->
      <origin xyz="0.150 0.0 0.240"/>
      <parent link="base_link"/>
      <child link="camera_base_link"/>
   </joint>
-  
- 
+
+
   <link name="camera_pan_link">
      <inertial>
        <mass value="0.1" />
-       <!-- origin xyz="0 0 0" rpy="0 0 0" / -->
        <origin xyz="0 0 0" rpy="0 0 0" />
        <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1" />
     </inertial>
   </link>
-  
+
   <joint name="joint_camera_pan" type="continuous">
      <axis xyz="0 0 1" />
      <origin xyz="0.0 0.0 0.0"/>
@@ -545,7 +573,7 @@
      <child link="camera_pan_link"/>
      <limit effort="100.0" velocity="100.0" lower="-3.1416" upper="3.1416"/>
      <joint_properties damping="0.1" friction="0.1"/>
-  </joint>  
+  </joint>
 
   <transmission name="joint_pan_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -557,17 +585,16 @@
       <mechanicalReduction>1.0</mechanicalReduction>
     </actuator>
   </transmission>
-  
+
 
   <link name="camera_tilt_link">
      <inertial>
        <mass value="0.1" />
-       <!-- origin xyz="0 0 0" rpy="0 0 0" / -->
        <origin xyz="0 0 0.3" rpy="0 0 0" />
        <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1" />
     </inertial>
   </link>
-  
+
   <joint name="joint_camera_tilt" type="continuous">
      <axis xyz="0 1 0" />
      <origin xyz="0.0 0.0 0.0"/>
@@ -587,7 +614,6 @@
       <mechanicalReduction>1.0</mechanicalReduction>
     </actuator>
   </transmission>
-      
+-->
 
 </robot>
-
