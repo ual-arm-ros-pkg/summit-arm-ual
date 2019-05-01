@@ -843,8 +843,8 @@ int summit_controller_dspic::SendSetMotorReferences(double rad, double mps){
        sprintf(cMsg,"%s,0.0,0.0,0.0\r", SET_MOTOR_REFERENCES);
 
 	crc = ComputeCRC(cMsg, 32);
-	ROS_INFO("summit_controller_dspic - Motor References %s,%2.3f,%2.3f,%d\r", SET_MOTOR_REFERENCES, rad, mps, crc);
-	ROS_INFO("summit_controller_dspic::SendSetMotorReferences: Sending %s,%2.3f,%2.3f,%d to device", SET_MOTOR_REFERENCES, rad, mps, crc);
+	ROS_DEBUG("summit_controller_dspic - Motor References %s,%2.3f,%2.3f,%d\r", SET_MOTOR_REFERENCES, rad, mps, crc);
+	ROS_DEBUG("summit_controller_dspic::SendSetMotorReferences: Sending %s,%2.3f,%2.3f,%d to device", SET_MOTOR_REFERENCES, rad, mps, crc);
 
     // Sends the message
 	if(serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK) {
@@ -1280,7 +1280,7 @@ void summit_controller_dspic::SetMotorReferences(double rads, double mps)
     else if( (mps> 0.0) && (mps > MOTOR_DEF_MAX_SPEED) )
 	mps = MOTOR_DEF_MAX_SPEED;
 
-    ROS_INFO("summit_controller_dspic::SetMotorReferences: v=%2.3f a=%2.3f", rads, mps);
+    ROS_DEBUG("summit_controller_dspic::SetMotorReferences: v=%2.3f a=%2.3f", rads, mps);
 
     // Set references and command for next iteration
     dsPic_data.rad = rads;
