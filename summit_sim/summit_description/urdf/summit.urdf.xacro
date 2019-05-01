@@ -4,6 +4,8 @@
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
   <xacro:include filename="$(find summit_description)/urdf/summit.gazebo" />
+  <!-- Import Rviz colors -->
+	<xacro:include filename="$(find summit_description)/urdf/materials.xacro" />
 
   <!-- Robot mechanical and motor parameters -->
   <xacro:property name="PI" value="3.1415926535897931"/>
@@ -490,6 +492,7 @@
       <geometry>
         <mesh filename="package://summit_description/meshes/soporte_laser.STL" scale="0.001 0.001 0.001"/>
       </geometry>
+      <material name="Blue" />
     </visual>
     <collision>
       <origin xyz="-0.02 -0.03 -0.01" rpy="${PI/2} 0 ${PI/2}"/>
@@ -509,18 +512,19 @@
   <joint name="laser_joint" type="fixed">
      <parent link="hokuyo_base_link"/>
      <child link="hokuyo_laser_link"/>
-     <origin xyz="0 0 0.05" rpy="0 0 0"/>
+     <origin xyz="0.01 0 0.099" rpy="0 0 0"/>
   </joint>
 
   <link name="hokuyo_laser_link" type="laser">
     <visual>
-      <origin xyz="-0.02 -0.025 0" rpy="${PI/2} 0 ${PI/2}"/>
+      <origin xyz="-0.033 -0.025 -0.05" rpy="${PI/2} 0 ${PI/2}"/>
       <geometry>
         <mesh filename="package://summit_description/meshes/Hokuyo_UST-10LX.STL" scale="0.001 0.001 0.001"/>
       </geometry>
+      <material name="light_grey" />
     </visual>
     <collision>
-      <origin xyz="-0.02 -0.025 0" rpy="${PI/2} 0 ${PI/2}"/>
+      <origin xyz="-0.033 -0.025 -0.04" rpy="${PI/2} 0 ${PI/2}"/>
       <geometry>
         <mesh filename="package://summit_description/meshes/Hokuyo_UST-10LX.STL" scale="0.001 0.001 0.001"/>
       </geometry>
