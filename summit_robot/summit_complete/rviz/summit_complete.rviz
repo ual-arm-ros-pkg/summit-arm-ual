@@ -26,7 +26,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: LaserScan
+    SyncSource: Hokuyo
 Toolbars:
   toolButtonStyle: 2
 Visualization Manager:
@@ -90,19 +90,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_base_link:
+        camera_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_pan_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_tilt_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         front_left_wheel:
           Alpha: 1
           Show Axes: false
@@ -119,6 +111,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         front_right_wheel_dir:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        hokuyo_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -143,8 +140,8 @@ Visualization Manager:
       Axis: Z
       Channel Name: intensity
       Class: rviz/LaserScan
-      Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color: 255; 0; 0
+      Color Transformer: FlatColor
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -152,13 +149,13 @@ Visualization Manager:
       Max Intensity: 2457
       Min Color: 0; 0; 0
       Min Intensity: 211
-      Name: LaserScan
+      Name: Hokuyo
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
-      Style: Flat Squares
+      Size (m): 0.0299999993
+      Style: Spheres
       Topic: /scan
       Unreliable: false
       Use Fixed Frame: true
@@ -175,6 +172,7 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
+        "": true
         Grid: true
         LaserScan: true
         Map: true
@@ -200,11 +198,15 @@ Visualization Manager:
           Value: false
         base_link:
           Value: true
-        camera_base_link:
+        camera_depth_frame:
           Value: false
-        camera_pan_link:
+        camera_depth_optical_frame:
           Value: false
-        camera_tilt_link:
+        camera_link:
+          Value: true
+        camera_rgb_frame:
+          Value: false
+        camera_rgb_optical_frame:
           Value: false
         front_left_wheel:
           Value: false
@@ -214,8 +216,10 @@ Visualization Manager:
           Value: false
         front_right_wheel_dir:
           Value: false
-        hokuyo_laser_link:
+        hokuyo_base_link:
           Value: false
+        hokuyo_laser_link:
+          Value: true
         map:
           Value: true
         odom:
@@ -236,9 +240,12 @@ Visualization Manager:
                 back_right_wheel_dir:
                   back_right_wheel:
                     {}
-                camera_base_link:
-                  camera_pan_link:
-                    camera_tilt_link:
+                camera_link:
+                  camera_depth_frame:
+                    camera_depth_optical_frame:
+                      {}
+                  camera_rgb_frame:
+                    camera_rgb_optical_frame:
                       {}
                 front_left_wheel_dir:
                   front_left_wheel:
@@ -246,8 +253,9 @@ Visualization Manager:
                 front_right_wheel_dir:
                   front_right_wheel:
                     {}
-              hokuyo_laser_link:
-                {}
+                hokuyo_base_link:
+                  hokuyo_laser_link:
+                    {}
       Update Interval: 0
       Value: true
     - Alpha: 0.699999988
@@ -276,6 +284,36 @@ Visualization Manager:
       Topic: /particlecloud
       Unreliable: false
       Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/LaserScan
+      Color: 0; 85; 255
+      Color Transformer: FlatColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: LaserScan
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0299999993
+      Style: Spheres
+      Topic: /camera/scan
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -301,7 +339,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10.6030092
+      Distance: 7.7271781
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -316,10 +354,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.570397735
+      Pitch: 0.300398111
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.24039698
+      Yaw: 3.5304122
     Saved: ~
 Window Geometry:
   Camera:
