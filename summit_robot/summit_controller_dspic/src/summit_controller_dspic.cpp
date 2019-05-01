@@ -332,7 +332,7 @@ void summit_controller_dspic::ReadyState(){
 			// Saves current time
 			// Inits nodeguard reply timer
 			tDsPicReply = ros::Time::now(); 
-			ROS_INFO("summit_controller_dspic::ReadyState: Ret = %d", ret);
+			ROS_DEBUG("summit_controller_dspic::ReadyState: Ret = %d", ret);
 		break;
 	}
 
