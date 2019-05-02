@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 	<!-- Node: Local obstacles builder -->
-	<!--
+
 	<node pkg="mrpt_local_obstacles" type="mrpt_local_obstacles_node" name="mrpt_local_obstacles_node" output="screen">
-		<param name="source_topics_2dscan" value="laser1,laser2"/>
+                <!--param name="source_topics_2dscan" value="laser1,laser2"/-->
+		<param name="source_topics_2dscan" value="/scan, /camera/scan" />
 		<param name="show_gui" value="false"/>
 	</node>
--->
+
 	<!-- Launch a MvSim simulator instance with one robot -->
 	<!--
 	<arg name="world_file" default="$(find mvsim)/mvsim_tutorial/mvsim_demo_1robot.xml" />
@@ -26,9 +27,9 @@
 
 		<!-- This is to allow the reactive responsive to RVIZ GUI commands -->
 		<remap from="reactive_nav_goal" to="/move_base_simple/goal" />
-
+                
 		<!-- Enable logs to ~/.ros/reactivenav.logs , use navlog-viewer to open them -->
-<!--		<param name="save_nav_log" value="true"/> -->
+		<param name="save_nav_log" value="true"/> 
 
 		<!-- Robot shape: Load from geometry_msgs::Polygon topic -->
 		<param name="topic_robot_shape" value="/chassis_polygon" />
