@@ -12,15 +12,16 @@
                       joint_brw_position_controller
                       joint_flw_position_controller
                       joint_frw_position_controller
-                      joint_pan_position_controller
-                      joint_tilt_position_controller
-                      joint_read_state_controller 
-                      "/>
+                      joint_read_state_controller"/>
+
+<!--These controllers are not needed since the PTZ camera is not being used
+          joint_pan_position_controller
+          joint_tilt_position_controller-->
 
   <!-- Load joint controller configurations from YAcd .ML file to parameter server -->
   <rosparam file="$(find summit_control)/config/summit_control.yaml" command="load"/>
 
-  <!-- once the joint_state is published, run the robot_state_publisher, the namespace has to be adapted --> 
+  <!-- once the joint_state is published, run the robot_state_publisher, the namespace has to be adapted -->
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
     respawn="false" output="screen">
@@ -28,5 +29,3 @@
   </node>
 
 </launch>
-
- 
