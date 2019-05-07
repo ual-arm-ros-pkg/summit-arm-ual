@@ -4,6 +4,7 @@
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
        <robotNamespace>/summit</robotNamespace>
+       <legacyModeNS>true</legacyModeNS>
        <!--controlPeriod>0.003</controlPeriod-->
 	<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
