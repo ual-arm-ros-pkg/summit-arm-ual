@@ -12,8 +12,8 @@ More info:  http://wiki.ros.org/pointcloud_to_laserscan
 <!-- Published Topics -->
   <remap from="scan" to= "/camera/scan" />
   <rosparam>
-    min_height: 0.0
-    max_height: 1.0
+    min_height: -0.35
+    max_height: 0.15
     angle_min: -1.5708  <!-- -pi/2 -->
     angle_max: 1.5708   <!-- pi/2 -->
     angle_increment: 0.00872665  <!-- pi/360 -->
@@ -21,7 +21,7 @@ More info:  http://wiki.ros.org/pointcloud_to_laserscan
     range_min: 0.45
     range_max: 4.0
     target_frame: camera_link  <!-- default: none -->
-    concurrency_level: 1 
+    concurrency_level: 1
     use_inf: true
   </rosparam>
 
