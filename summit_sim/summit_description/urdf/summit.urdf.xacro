@@ -541,18 +541,18 @@
   <joint name="joint_camera" type="fixed">
      <parent link="base_link"/>
      <child link="camera_link"/>
-     <origin xyz="0.08 0.0 0.265" rpy="0 0 0"/>
+     <origin xyz="0.08 0.07 0.265" rpy="0 0 0"/>
   </joint>
 
   <link name="camera_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 -0.07 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://summit_description/meshes/xtion_pro_live.dae" />
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 -0.07 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://summit_description/meshes/xtion_pro_live.dae" />
       </geometry>
