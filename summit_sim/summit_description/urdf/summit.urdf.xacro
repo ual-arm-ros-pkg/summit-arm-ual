@@ -561,7 +561,29 @@
   </link>
 
 
+  <!-- =================================================================== -->
+  <!-- IMU -->
+  <joint name="joint_IMU" type="fixed">
+     <parent link="base_link"/>
+     <child link="imu_link"/>
+     <origin xyz="0.25 0 0.18" rpy="0 0 0"/>
+  </joint>
 
+  <link name="imu_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01" />
+      </geometry>
+    </collision>
+
+  </link>
 
 
 
