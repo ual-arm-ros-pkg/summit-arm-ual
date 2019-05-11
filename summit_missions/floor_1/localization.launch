@@ -13,6 +13,7 @@
     <param name="debug" value="true"/>
     <param name="gui_mrpt" value="false"/>
     <param name="sensor_sources" value="/scan"/>
+    <param name="pose_broadcast" value="true"/>
     <remap from="particlecloud" to="/particlecloud"/>
   </node>
 
