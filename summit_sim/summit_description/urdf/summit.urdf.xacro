@@ -557,9 +557,47 @@
         <mesh filename="package://summit_description/meshes/xtion_pro_live.dae" />
       </geometry>
     </collision>
-
+    <inertial>
+      <mass value="0.200" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
+    </inertial>
   </link>
 
+  <!-- depth_frame -->
+  <joint name="camera_depth_joint" type="fixed">
+    <origin xyz="0.0 -0.022 0.0" rpy="0 0 0" />
+    <parent link="camera_link" />
+    <child link="camera_depth_frame"/>
+  </joint>
+
+   <link name="camera_depth_frame"/>
+
+   <joint name="camera_depth_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-PI/2} 0.0 ${-PI/2}" />
+    <parent link="camera_depth_frame" />
+    <child link="camera_depth_optical_frame"/>
+  </joint>
+
+   <link name="camera_depth_optical_frame"/>
+   <!-- =================================================================== -->
+
+  <joint name="camera_rgb_joint" type="fixed">
+    <origin xyz="0.0 -0.049 0.0" rpy="0 0 0" />
+    <parent link="camera_link" />
+    <child link="camera_rgb_frame"/>
+  </joint>
+
+  <!--  rgb_frame -->
+  <link name="camera_rgb_frame"/>
+
+  <joint name="camera_rgb_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-PI/2} 0.0 ${-PI/2}" />
+    <parent link="camera_rgb_frame" />
+    <child link="camera_rgb_optical_frame"/>
+  </joint>
+
+   <link name="camera_rgb_optical_frame"/>
 
   <!-- =================================================================== -->
   <!-- IMU -->
