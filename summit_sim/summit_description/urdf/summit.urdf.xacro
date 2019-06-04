@@ -623,6 +623,14 @@
 
   </link>
 
+  <joint name="to_gripper_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="to_gripper_link"/>
+    <origin xyz="-0.05 0 0.35" rpy="0 0 0"/>
+  </joint>
+
+  <link name="to_gripper_link"/>
+
 
 
 
