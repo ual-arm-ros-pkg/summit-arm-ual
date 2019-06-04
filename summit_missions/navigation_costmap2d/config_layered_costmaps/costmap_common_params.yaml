@@ -1,0 +1,50 @@
+#footprint: [[0.36, -0.21], [0.36, 0.21], [-0.33, 0.21], [-0.33, -0.21]]
+#robot_radius:
+
+#Set the tolerance we're willing to have for tftransforms
+#transform_tolerance: 0.3
+#map_type: costmap
+
+#obstacle_layer:
+#  enabled: true
+#  obstacle_range: 2.5
+#  raytrace_range: 3.0
+#  inflation_radius: 0.25
+#  track_unknown_space: false
+#  observation_sources: hokuyo_laser
+#  hokuyo_laser: {sensor_frame: hokuyo_laser_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+
+#Determines the maximum range sensor reading that will result in an obstacle put into the costmap.
+#obstacle_range: 2.5
+#
+#raytrace_range: 3.0
+#inflation_radius for the costmap.
+
+#observation_ranges: hokuyo_laser
+#hokuyo_laser: {sensor_frame: hokuyo_laser_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+
+#inflation_layer:
+#  enabled: true
+
+#static_layer:
+#  enabled: true
+#  map_topic: "/map"
+
+# //////////////////////////////////////////////////////////////////////////////////////////////
+map_type: costmap
+
+transform_tolerance: 0.3            #Set the tolerance we're willing to have for tf transforms.
+footprint: [[0.36, -0.21], [0.36, 0.21], [-0.33, 0.21], [-0.33, -0.21]]
+#robot_radius:
+
+inflation_layer:
+  inflation_radius: 0.3
+
+obstacle_layer:
+  obstacle_range: 3.0
+  obstacle_layer: 2.5
+  observation_sources: hokuyo_laser
+  hokuyo_laser: {sensor_frame: hokuyo_laser_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+
+static_layer:
+  map_topic: map
