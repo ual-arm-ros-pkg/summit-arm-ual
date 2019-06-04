@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="rvizconfig" 
+      default="$(find summit_missions)/rviz/cite_IV_floor1_costmap.rviz" />
+
+
+  <!-- Show in Rviz -->
+  <node name="rviz" 
+      pkg="rviz" 
+      type="rviz" 
+      args="-d $(arg rvizconfig)" 
+      required="false" />
+
+
+</launch>
