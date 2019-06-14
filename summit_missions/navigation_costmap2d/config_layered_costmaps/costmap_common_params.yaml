@@ -1,50 +1,24 @@
-#footprint: [[0.36, -0.21], [0.36, 0.21], [-0.33, 0.21], [-0.33, -0.21]]
-#robot_radius:
 
-#Set the tolerance we're willing to have for tftransforms
-#transform_tolerance: 0.3
-#map_type: costmap
-
-#obstacle_layer:
-#  enabled: true
-#  obstacle_range: 2.5
-#  raytrace_range: 3.0
-#  inflation_radius: 0.25
-#  track_unknown_space: false
-#  observation_sources: hokuyo_laser
-#  hokuyo_laser: {sensor_frame: hokuyo_laser_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
-
-#Determines the maximum range sensor reading that will result in an obstacle put into the costmap.
-#obstacle_range: 2.5
-#
-#raytrace_range: 3.0
-#inflation_radius for the costmap.
-
-#observation_ranges: hokuyo_laser
-#hokuyo_laser: {sensor_frame: hokuyo_laser_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
-
-#inflation_layer:
-#  enabled: true
-
-#static_layer:
-#  enabled: true
-#  map_topic: "/map"
-
-# //////////////////////////////////////////////////////////////////////////////////////////////
-map_type: costmap
-
-transform_tolerance: 0.3            #Set the tolerance we're willing to have for tf transforms.
 footprint: [[0.36, -0.21], [0.36, 0.21], [-0.33, 0.21], [-0.33, -0.21]]
 #robot_radius:
-
-inflation_layer:
-  inflation_radius: 0.3
+transform_tolerance: 0.3     #1.0?       #Set the tolerance we're willing to have for tf transforms.
+map_type: costmap
 
 obstacle_layer:
-  obstacle_range: 3.0
-  obstacle_layer: 2.5
+  obstacle_range: 3.0               #Maximum distance (mts) that will be considered from sensor reading that will result in an obstacle put into the costmap.
+  obstacle_layer: 3.5               #Maximum distance (mts) that will be considered when taking the free space around the robot and putting in the costmap.
+  inflation_radius: 0.2
+  track_unknown_space: false
+  combination_method: 1
   observation_sources: hokuyo_laser
   hokuyo_laser: {sensor_frame: hokuyo_laser_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+  #observation_sources: pointcloud_sensor
+  #pointcloud_sensor: {sensor_frame: camera_link, data_type: PointCloud2, topic: /camera/depth/points, marking: true, clearing: true}
+
+
+inflation_layer:
+  inflation_radius: 0.3       #The radius in meters to which the map inflates obstacle cost values.
+  cost_scaling_factor: 10.0   ## exponential rate at which the obstacle cost drops off (default: 10)
 
 static_layer:
-  map_topic: map
+  map_topic: "/map"

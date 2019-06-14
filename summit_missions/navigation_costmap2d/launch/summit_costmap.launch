@@ -1,0 +1,26 @@
+<launch>
+
+    <!-- Loading the map (Generated using MRPT) -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find summit_missions)/floor_1/CITE_IV_floor1_COccupancyGridMap2D_00.png 0.08" respawn="false" />
+
+    <!-- localization (Using MRPT) -->
+  <include file="$(find summit_missions)/floor_1/localization.launch" />
+
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find summit_missions)/navigation_costmap2d/config_layered_costmaps/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find summit_missions)/navigation_costmap2d/config_layered_costmaps/costmap_common_params.yaml" command="load" ns="local_costmap" />
+
+    <rosparam file="$(find summit_missions)/navigation_costmap2d/config_layered_costmaps/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find summit_missions)/navigation_costmap2d/config_layered_costmaps/local_costmap_params.yaml" command="load" />
+
+    <rosparam file="$(find summit_missions)/navigation_costmap2d/config_layered_costmaps/teb_local_planner_params.yaml" command="load" />
+
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+      <param name="controller_frequency" value="3.0" />
+      <param name="controller_patience" value="10.0" />
+    <param name="clearing_rotation_allowed" value="false" />
+  </node>
+
+
+</launch>
