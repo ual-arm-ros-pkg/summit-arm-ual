@@ -1,7 +1,0 @@
-global_costmap:
-  global_frame: map
-  robot_base_frame: base_footprint
-  #transform_tolerance: 10
-  update_frequency: 4.0         #Frequency (Hz) for map update ..
-  #publish_frequency: 3.0        #Frequency (Hz) for publication of the display data.
-  static_map: true              #Determines whether or not the costmap should initialize itself based on a map.
