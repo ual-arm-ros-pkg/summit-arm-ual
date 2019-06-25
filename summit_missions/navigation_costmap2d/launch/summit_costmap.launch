@@ -1,11 +1,19 @@
 <launch>
 
     <!-- Loading the map (Generated using MRPT) -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find summit_missions)/floor_1/CITE_IV_floor1_COccupancyGridMap2D_00.png 0.08" respawn="false" />
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find summit_missions)/maps/MAP1_CITE_IV_1_10.png 0.07" />
 
     <!-- localization (Using MRPT) -->
-  <include file="$(find summit_missions)/floor_1/localization.launch" />
+  <!--include file="$(find summit_missions)/floor_1/localization.launch" /-->
 
+  <!--include file="$(find summit_missions)/test_in_020/localization_in_020.launch" /-->
+
+  <!-- Run AMCL -->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+  <!--include file="$(find amcl)/examples/amcl_omni.launch" /-->
+    <param name="min_particles" value="200" />
+    <param name="max_particles" value="1000" />
+  </node>
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find summit_missions)/navigation_costmap2d/config_layered_costmaps/costmap_common_params.yaml" command="load" ns="global_costmap" />
@@ -17,10 +25,22 @@
     <rosparam file="$(find summit_missions)/navigation_costmap2d/config_layered_costmaps/teb_local_planner_params.yaml" command="load" />
 
     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
-      <param name="controller_frequency" value="3.0" />
+      <param name="controller_frequency" value="2.0" />
       <param name="controller_patience" value="10.0" />
-    <param name="clearing_rotation_allowed" value="false" />
+      <param name="clearing_rotation_allowed" value="false" />
+      <param name="recovery_behavior_enabled" value="true" />
+
+    <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+      <param name="default_tolerance" value="0.3" />
+      <param name="allowed_unknown" value="false" />
+      <param name="visualize_potential" value="true" />
+      <param name="use_dijkstra" value="true" />
+      <param name="use_quadratic" value="false" />
+      <param name="old_navfn_behavior" value="false" />
+
   </node>
+
+
 
 
 </launch>

@@ -4,5 +4,8 @@ global_costmap:
   update_frequency: 5.0             #Frequency (Hz) for map update...
   publish_frequency: 3.0
   static_map: true
+  resolution: 0.07
+  origin_x: -5.0
+  origin_y: -5.0
 
   transform_tolerance: 30

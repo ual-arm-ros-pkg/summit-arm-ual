@@ -5,22 +5,22 @@ TebLocalPlannerROS:
 
    # Trajectory
   teb_autosize: True
-  dt_ref: 0.3
-  dt_hysteresis: 0.1
+  dt_ref: 0.5
+  dt_hysteresis: 0.05
   global_plan_overwrite_orientation: True
   max_global_plan_lookahead_dist: 3.0
-  feasibility_check_no_poses: 5
+  feasibility_check_no_poses: 3
   allow_init_backward_motion: false
 
     # Robot
-  max_vel_x: 0.4
-  max_vel_x_backwards: 0.2
-  max_vel_theta: 0.3
+  max_vel_x: 0.6
+  max_vel_x_backwards: 0.35
+  max_vel_theta: 0.5
   acc_lim_x: 0.5
   acc_lim_theta: 0.5
    # ***************** Summit robot parameters ********************
-  min_turning_radius: 2.2    # Min turning radius of the Summit robot (compute value using a model or adjust with rqt_reconfigure)
-  wheelbase: 0.37
+  min_turning_radius: 2.3    # Min turning radius of the Summit robot (compute value using a model or adjust with rqt_reconfigure)
+  wheelbase: 0.40
   cmd_angle_instead_rotvel: True
   #http://wiki.ros.org/teb_local_planner/Tutorials/Obstacle%20Avoidance%20and%20Robot%20Footprint%20Model
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
@@ -41,7 +41,8 @@ TebLocalPlannerROS:
   free_goal_vel: False
 
       # Obstacles
-  min_obstacle_dist: 0.22 # This value must also include our robot's expansion, since footprint_model is set to "line".
+  min_obstacle_dist: 0.35 # This value must also include our robot's expansion, since footprint_model is set to "line".
+  inflation_dist: 0.6
   include_costmap_obstacles: True
   costmap_obstacles_behind_robot_dist: 1.5
   obstacle_poses_affected: 30
@@ -50,22 +51,21 @@ TebLocalPlannerROS:
   costmap_converter_rate: 5
 
        # Optimization
-  no_inner_iterations: 3
-  no_outer_iterations: 3
+  no_inner_iterations: 5
+  no_outer_iterations: 5
   optimization_activate: True
   optimization_verbose: False
   penalty_epsilon: 0.1
-  weight_max_vel_x: 2
-  weight_max_vel_theta: 1
-  weight_acc_lim_x: 1
+  weight_max_vel_x: 15
+  weight_max_vel_theta: 15
+  weight_acc_lim_x: 2
   weight_acc_lim_theta: 1
-  weight_kinematics_nh: 1000
-  weight_kinematics_forward_drive: 100
-  weight_kinematics_turning_radius: 1
-  weight_optimaltime: 1
-  weight_obstacle: 50
-  weight_dynamic_obstacle: 10 # not in use yet
-  #alternative_time_cost: False # not in use yet
+  weight_kinematics_nh: 2500
+  weight_kinematics_forward_drive: 200
+  weight_kinematics_turning_radius: 100
+  weight_optimaltime: 3
+  weight_obstacle: 70
+  #weight_dynamic_obstacle: 10
 
       # Homotopy Class Planner
   enable_homotopy_class_planning: True

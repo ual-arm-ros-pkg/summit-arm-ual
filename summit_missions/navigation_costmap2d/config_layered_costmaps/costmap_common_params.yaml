@@ -1,13 +1,14 @@
 
 footprint: [[0.36, -0.21], [0.36, 0.21], [-0.33, 0.21], [-0.33, -0.21]]
 #robot_radius:
-transform_tolerance: 0.3     #1.0?       #Set the tolerance we're willing to have for tf transforms.
+transform_tolerance: 1.0     #1.0?       #Set the tolerance we're willing to have for tf transforms.
 map_type: costmap
 
 obstacle_layer:
-  obstacle_range: 3.0               #Maximum distance (mts) that will be considered from sensor reading that will result in an obstacle put into the costmap.
-  obstacle_layer: 3.5               #Maximum distance (mts) that will be considered when taking the free space around the robot and putting in the costmap.
-  inflation_radius: 0.2
+  enabled: true
+  obstacle_range: 3.0   #3.0            #Maximum distance (mts) that will be considered from sensor reading that will result in an obstacle put into the costmap.
+  raytrace_range: 3.5   #3.5            #Maximum distance (mts) that will be considered when taking the free space around the robot and putting in the costmap.
+  inflation_radius: 0.22
   track_unknown_space: false
   combination_method: 1
   observation_sources: hokuyo_laser
@@ -17,8 +18,10 @@ obstacle_layer:
 
 
 inflation_layer:
-  inflation_radius: 0.3       #The radius in meters to which the map inflates obstacle cost values.
+  enabled: true
+  inflation_radius: 0.17       #The radius in meters to which the map inflates obstacle cost values.
   cost_scaling_factor: 10.0   ## exponential rate at which the obstacle cost drops off (default: 10)
 
 static_layer:
+  enabled: true
   map_topic: "/map"
