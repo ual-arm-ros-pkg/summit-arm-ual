@@ -1,7 +1,10 @@
 <launch>
 
     <!-- Loading the map (Generated using MRPT) -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find summit_missions)/maps/MAP1_CITE_IV_1_10.png 0.07" />
+  <!--node name="map_server" pkg="map_server" type="map_server" args="$(find summit_missions)/maps/MAP1_CITE_IV_1_10.png 0.07" /-->
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find summit_missions)/maps/map2_citeIV.png 0.07" />
+
 
     <!-- localization (Using MRPT) -->
   <!--include file="$(find summit_missions)/floor_1/localization.launch" /-->
