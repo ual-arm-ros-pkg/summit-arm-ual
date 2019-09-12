@@ -35,7 +35,7 @@
   <!--
         MRPT localization (floor 1 CITE IV)
   -->
-  <include file="$(find summit_missions)/floor_1/localization.launch"/>
+  <!--include file="$(find summit_missions)/floor_1/localization.launch"/-->
 
 
 

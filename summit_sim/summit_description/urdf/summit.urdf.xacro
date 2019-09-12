@@ -626,7 +626,7 @@
   <joint name="to_gripper_joint" type="fixed">
     <parent link="base_link"/>
     <child link="to_gripper_link"/>
-    <origin xyz="-0.05 0 0.35" rpy="0 0 0"/>
+    <origin xyz="-0.08 0 0.6" rpy="0 0 ${PI/2}"/>
   </joint>
 
   <link name="to_gripper_link"/>
