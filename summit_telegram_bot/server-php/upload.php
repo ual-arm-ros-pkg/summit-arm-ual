@@ -1,5 +1,5 @@
 <?php
-  $targetdir = '/tmp/summit-uploads/';
+  $targetdir = 'uploads/';
   mkdir($targetdir);
 
   $targetfile = $targetdir.basename($_FILES['UPLOAD']['name']);
