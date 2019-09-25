@@ -11,6 +11,16 @@ logging.basicConfig(format='%(asctime)s-%(name)s-%(levelname)s-%(message)s',
 logger = logging.getLogger(__name__)
 
 
+def help(update, context):
+    """Send a message when the command /help is issued."""
+    s = "Entiendo los siguientes comandos:\n"
+    s += "/show_camera: Lo que veo con mi cámara.\n"
+    s += "/show_lidar: Lo que ve mi escáner láser.\n"
+    s += "/show_map: El mapa de mi entorno.\n"
+    s += "/show_pose: ¿Dónde estoy en el mapa?.\n"
+    update.message.reply_text(text=s)
+
+
 def cmd_last_image(update, context):
     """Send the last image sent by the robot."""
     last_camera_img = '/var/www/robot-summit/uploads/last_camera_img.png'
@@ -18,13 +28,6 @@ def cmd_last_image(update, context):
     s = '<b>Fecha de última imagen</b>: xxx'
     update.message.reply_text(text=s, parse_mode='HTML')
     context.bot.send_photo(chat_id=chat_id, photo=open(last_camera_img, 'rb'))
-
-
-def help(update, context):
-    """Send a message when the command /help is issued."""
-    s = "Entiendo los siguientes comandos:\n"
-    s += "/last_image: Lo que veo con mi cámara.\n"
-    update.message.reply_text(text=s)
 
 
 def cmd_generic_msg(update, context):
@@ -48,7 +51,7 @@ def main():
     token = open(token_file, "r").read().rstrip()
     updater = Updater(token=token, use_context=True)
     dp = updater.dispatcher
-    dp.add_handler(CommandHandler('last_image', cmd_last_image))
+    dp.add_handler(CommandHandler('show_camera', cmd_last_image))
     dp.add_handler(CommandHandler('help', help))
 
     dp.add_handler(MessageHandler(filters.Filters.all, cmd_generic_msg), 1)
