@@ -107,6 +107,7 @@ def cmd_last_battery(update, context):
 def cmd_generic_msg(update, context):
     """Generic conversation msg."""
     in_msg = update.message.text
+    open("./LOG_TELEGRAM_BOT.txt","at").write(in_msg + "\n")
     # if input was a commmand, stop further processing:
     if (in_msg[0] == '/'):
         return
