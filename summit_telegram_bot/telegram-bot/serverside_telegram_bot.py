@@ -6,6 +6,7 @@ from datetime import datetime
 import logging
 import os
 import sys
+import TelegramBotCommonConstants as TBC
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
@@ -16,35 +17,27 @@ logger = logging.getLogger(__name__)
 
 # -- Configuration and constants --
 UPLOADS_BASEDIR = '/var/www/robot-summit/uploads/'
-FILENAME_CAMERA_IMG = 'last_camera_img.png'
-FILENAME_BATTERY = 'last_battery.txt'
-FILENAME_LIDAR = 'last_lidar.png'
-FILENAME_MAP = 'last_map.png'
-FILENAME_POSE = 'last_pose.txt'
 # -------------------------------
 
 
 # ChatBot:
 myChatBot = ChatBot(
     'Summit',  # name
-
+    # ---
     storage_adapter='chatterbot.storage.SQLStorageAdapter',
     database_uri='sqlite:///summit-chatter-bot.sqlite3',
 
     logic_adapters=[
         {
             "import_path": "chatterbot.logic.BestMatch",
-            "statement_comparison_function": "chatterbot.comparisons.levenshtein_distance",
+            "statement_comparison_function":
+                "chatterbot.comparisons.levenshtein_distance",
             "maximum_similarity_threshold": 0.35,
-            "default_response": "Perdona, no te he entendido bien. Usa /help para ver los comandos que entiendo."
+            "default_response": "Perdona, no te he entendido bien. "
+            + "Usa /help para ver los comandos que entiendo."
         }
-        #        {
-        #            'import_path': 'chatterbot.logic.SpecificResponseAdapter',
-        #            'input_text': 'Q',
-        #            'output_text': 'A'
-        #        }
     ],
-
+    # ---
     preprocessors=[
         'chatterbot.preprocessors.clean_whitespace'
     ]
@@ -83,31 +76,31 @@ def reply_txt_file_and_timestamp(update, context, filename, msg):
 def cmd_last_image(update, context):
     """Send the last image sent by the robot."""
     reply_file_and_timestamp(
-        update, context, UPLOADS_BASEDIR + FILENAME_CAMERA_IMG,
+        update, context, UPLOADS_BASEDIR + TBC.FILENAME_CAMERA_IMG,
         'Fecha de última imagen')
 
 
 def cmd_last_map(update, context):
     reply_file_and_timestamp(
-        update, context, UPLOADS_BASEDIR + FILENAME_MAP,
+        update, context, UPLOADS_BASEDIR + TBC.FILENAME_MAP,
         'Última actualización del mapa')
 
 
 def cmd_last_lidar(update, context):
     reply_file_and_timestamp(
-        update, context, UPLOADS_BASEDIR + FILENAME_LIDAR,
+        update, context, UPLOADS_BASEDIR + TBC.FILENAME_LIDAR,
         'Fecha de último barrido LIDAR')
 
 
 def cmd_last_pose(update, context):
     reply_txt_file_and_timestamp(
-        update, context, UPLOADS_BASEDIR + FILENAME_POSE,
+        update, context, UPLOADS_BASEDIR + TBC.FILENAME_POSE,
         'Última actualización de pose')
 
 
 def cmd_last_battery(update, context):
     reply_txt_file_and_timestamp(
-        update, context, UPLOADS_BASEDIR + FILENAME_BATTERY,
+        update, context, UPLOADS_BASEDIR + TBC.FILENAME_BATTERY,
         'Última actualización de batería')
 
 
@@ -133,7 +126,8 @@ def error(update, context):
 def main():
     if (len(sys.argv) != 3):
         logger.error(
-            "Usage: summit_telegram_bot.py <TELEGRAM_API_TOKEN_FILE> <CHATBOT_TRAIN.yml>")
+            "Usage: summit_telegram_bot.py "
+            + "<TELEGRAM_API_TOKEN_FILE> <CHATBOT_TRAIN.yml>")
         return
 
     token_file = str(sys.argv[1])
