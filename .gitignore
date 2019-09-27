@@ -1,3 +1,5 @@
 *.svn
 *~
 summit-telegram-token.txt
+*.pickle
+*.sqlite3
