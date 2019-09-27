@@ -1,6 +1,5 @@
 robotnik_arduimu:
-#  port:  /dev/ttyUSB_IMU
-  port:  /dev/ttyUSB1
+  port: /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A1024O16-if00-port0
   base_frame_id: base_link
   imu_frame_id: imu_link
   # calibrate_mag.m

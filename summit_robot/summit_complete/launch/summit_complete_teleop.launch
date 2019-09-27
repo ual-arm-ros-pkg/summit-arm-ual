@@ -20,7 +20,7 @@
   <!-- 
 	start robotnik_arduimu 
   -->
-  <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu.launch"/>
+  <include file="$(find robotnik_arduimu)/launch/robotnik_arduimu.launch"/> 
 
   <!--
         start Hokuyo Laser (Ethernet)
