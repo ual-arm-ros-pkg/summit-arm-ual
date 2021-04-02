@@ -27,7 +27,7 @@ logging.basicConfig(format='%(asctime)s-%(name)s-%(levelname)s-%(message)s',
 logger = logging.getLogger(__name__)
 
 # -- Global vars --
-TOPIC_CAMERA = '/camera'  # Type: sensor_msgs/Image
+TOPIC_CAMERA = '/usb_cam/image_raw'  # Type: sensor_msgs/Image
 TOPIC_2D_LIDAR = '/scan'  # Type: sensor_msgs/LaserScan
 TOPIC_BATTERY = '/battery'  # Type: std_msgs/Float32
 TOPIC_ODOMETRY = '/odom'  # Type: nav_msgs/Odometry
@@ -89,7 +89,7 @@ def callback_2d_lidar(data):
         return
     rospy.loginfo(rospy.get_caller_id() + "I got a lidar scan")
     IMG_SIZE = 500
-    IMG_SCALE = 80.0
+    IMG_SCALE = 40.0
     CXY = IMG_SIZE / 2
     SCAN_DECIM = 3
     SCAN_DECIM_COUNTER = SCAN_DECIM
@@ -110,8 +110,8 @@ def callback_2d_lidar(data):
         x = CXY + math.trunc(r * IMG_SCALE * math.cos(a))
         y = CXY + math.trunc(r * IMG_SCALE * math.sin(a))
 
-        if x < 2 or x >= IMG_SIZE - 2 or y < 2 or y >= IMG_SIZE - 2:
-            continue
+        #if x < 2  or x >= IMG_SIZE - 2 or y < 2 or y >= IMG_SIZE - 2:
+        #    continue
 
         cv2.line(frame, (CXY, CXY), (x, y), (200, 200, 200), 1)
         frame[(y - 1):(y + 1), (x - 1):(x + 1)] = (0, 0, 255)
