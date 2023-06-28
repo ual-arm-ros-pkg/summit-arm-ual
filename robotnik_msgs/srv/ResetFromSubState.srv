@@ -1,10 +1,10 @@
 #new substate
-int32 subState
+int32 sub_state
 
 ---
 
 # substate of the component when change
-int32 currentSubState
+int32 current_sub_state
 
 # The change is correct
 bool success

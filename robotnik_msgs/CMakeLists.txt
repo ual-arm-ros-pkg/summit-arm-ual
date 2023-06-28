@@ -36,7 +36,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
     msg/ElevatorStatus.msg
     msg/PantiltStatus.msg
     msg/PantiltStatusStamped.msg
-    msg/Cartesian_Euler_pose.msg
+    msg/CartesianEulerPose.msg
+    msg/AlarmMonitor.msg
     msg/AlarmsMonitor.msg
     msg/NamedInputsOutputs.msg
     msg/NamedInputOutput.msg
@@ -65,48 +66,47 @@ rosidl_generate_interfaces(${PROJECT_NAME}
     msg/MotorReferenceValue.msg
     msg/MotorReferenceValueArray.msg
     msg/RecordStatus.msg
-# Services:
-    srv/get_digital_input.srv
-    srv/set_analog_output.srv
-    srv/set_mode.srv
-    srv/set_ptz.srv
-    srv/get_mode.srv
-    srv/set_digital_output.srv
-    srv/set_odometry.srv
-    srv/set_height.srv
-    srv/enable_disable.srv
-    srv/home.srv
-    srv/axis_record.srv
-    srv/set_float_value.srv
-    srv/SetMotorStatus.srv
-    srv/SetElevator.srv
-    srv/get_alarms.srv
-    srv/ack_alarm.srv
-    srv/set_modbus_register.srv
-    srv/set_modbus_register_bit.srv
-    srv/get_modbus_register.srv
+    # Services:
+    srv/AckAlarm.srv
+    srv/AxisRecord.srv
+    srv/EnableDisable.srv
+    srv/GetAlarms.srv
     srv/GetBool.srv
-    srv/set_CartesianEuler_pose.srv
-    srv/set_named_digital_output.srv
-    srv/SetLaserMode.srv
-    srv/ResetFromSubState.srv
-    srv/QueryAlarms.srv
-    srv/SetNamedDigitalOutput.srv
-    srv/InsertTask.srv
-    srv/SetMotorPID.srv
-    srv/SetMotorMode.srv
-    srv/SetBuzzer.srv
-    srv/SetEncoderTurns.srv
+    srv/GetDigitalInput.srv
+    srv/GetModbusRegister.srv
+    srv/GetMode.srv
     srv/GetMotorsHeadingOffset.srv
     srv/GetPOI.srv
-    srv/SetString.srv
-    srv/SetInt16.srv
     srv/GetPTZ.srv
-    srv/SetByte.srv
-    srv/SetCurrent.srv
-    srv/SetTransform.srv
+    srv/Home.srv
+    srv/InsertTask.srv
     srv/LoggerQuery.srv
+    srv/QueryAlarms.srv
     srv/Record.srv
+    srv/ResetFromSubState.srv
+    srv/SetAnalogOutput.srv
+    srv/SetBuzzer.srv
+    srv/SetByte.srv
+    srv/SetCartesianEulerPose.srv
+    srv/SetCurrent.srv
+    srv/SetDigitalOutput.srv
+    srv/SetElevator.srv
+    srv/SetEncoderTurns.srv
+    srv/SetFloatValue.srv
+    srv/SetHeight.srv
+    srv/SetInt16.srv
+    srv/SetLaserMode.srv
+    srv/SetModbusRegister.srv
+    srv/SetModbusRegisterBit.srv
+    srv/SetMode.srv
+    srv/SetMotorMode.srv
+    srv/SetMotorPID.srv
+    srv/SetMotorStatus.srv
+    srv/SetNamedDigitalOutput.srv
+    srv/SetOdometry.srv
+    srv/SetPTZ.srv
+    srv/SetString.srv
+    srv/SetTransform.srv
 #    ADD_LINTER_TESTS
     # actions
     action/SetElevator.action

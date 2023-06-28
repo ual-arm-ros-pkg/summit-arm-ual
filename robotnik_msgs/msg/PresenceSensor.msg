@@ -1,7 +1,7 @@
 string CAMERA=camera
 string PHOTOCELL=photocell
 
-Header header
+std_msgs/Header header
 geometry_msgs/Pose pose
 string sensor_id # Which sensor is detecting the object (which camera or which photocell)
 string sensor_type # camera or photocell

@@ -1,1 +1,1 @@
-alarmmonitor[] alarms
+AlarmMonitor[] alarms

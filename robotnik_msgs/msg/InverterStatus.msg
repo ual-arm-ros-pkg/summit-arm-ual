@@ -1,4 +1,4 @@
-Header  header
+std_msgs/Header header
 float32 ac_voltage       # Output Voltage in Volts (Mandatory)
 float32 dc_voltage       # Input Voltage in Volts (If unmeasured NaN)
 float32 load             # Current percentage load on 0 to 1 range (If unmeasured NaN)

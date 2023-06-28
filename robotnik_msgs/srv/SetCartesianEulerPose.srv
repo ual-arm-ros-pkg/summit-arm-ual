@@ -5,10 +5,10 @@ float32 y
 # New robot Z position (mm)
 float32 z
 # New robot Orientation (grad)
-float32 A
+float32 a
 # New robot Orientation (grad)
-float32 B
+float32 b
 # New robot Orientation (grad)
-float32 C
+float32 c
 ---
 bool ret 

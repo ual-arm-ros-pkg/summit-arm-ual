@@ -1,5 +1,5 @@
-MotorStatus flwStatus
-MotorStatus blwStatus
-MotorStatus frwStatus
-MotorStatus brwStatus
+MotorStatus flw_status
+MotorStatus blw_status
+MotorStatus frw_status
+MotorStatus brw_status
 
