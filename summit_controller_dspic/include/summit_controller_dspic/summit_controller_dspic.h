@@ -8,22 +8,21 @@
  * (C) Robotnik Automation, SLL
  */
 
-#include <geometry_msgs/Twist.h>  // cmd_vel
 #include <math.h>
-#include <nav_msgs/Odometry.h>  // odom
-#include <robotnik_msgs/get_mode.h>
-#include <robotnik_msgs/set_mode.h>
-#include <robotnik_msgs/set_odometry.h>
-#include <ros/ros.h>
-#include <sensor_msgs/Joy.h>  // joystick
 #include <stdint.h>
 #include <string.h>
-#include <tf/transform_broadcaster.h>
 
+#include <ackermann_msgs/msg/ackermann_drive_stamped.hpp>
+#include <geometry_msgs/msg/twist.hpp>  // cmd_vel
+#include <nav_msgs/msg/odometry.hpp>  // odom
+#include <rclcpp/rclcpp.hpp>
+#include <robotnik_msgs/srv/get_mode.hpp>
+#include <robotnik_msgs/srv/set_mode.hpp>
+#include <robotnik_msgs/srv/set_odometry.hpp>
+#include <sensor_msgs/msg/joy.hpp>  // joystick
 #include <vector>
 
 #include "SerialDevice.h"
-#include "ackermann_msgs/AckermannDriveStamped.h"
 
 #define BUFFER_SIZE 1000
 
@@ -73,8 +72,8 @@
 //                 Reduction=1/(774.40/(motor gear=12)) =  (1/64.53)
 //#define DSPIC_RPM2MPS = (DSPIC_DIAMETER_WHEEL * DSPIC_PI)/60.0
 #define DSPIC_RPM2MPS 0.009212684  // 0.00902843
-#define DSPIC_D_WHEELS_M \
-    0.372  // Distance back axis to front axis car-type kinematics
+// Distance back axis to front axis car-type kinematics
+#define DSPIC_D_WHEELS_M 0.372
 
 // Default max speeds
 #define MOTOR_DEF_MAX_SPEED 3.00  // m/s
@@ -233,9 +232,9 @@ class summit_controller_dspic
     //! Status of DSPIC
     int iStatusDSPIC;
     //! Auxiliar variable for controling the timeout in the communication
-    ros::Time tNext;
+    rclcpp::Time tNext;
     //! Auxiliar variable for controling the timeout in the communication
-    ros::Time tNow;
+    rclcpp::Time tNow;
     //! Contains the last ocurred error
     int iErrorType;
     //! Contains the next programmed command
@@ -250,7 +249,7 @@ class summit_controller_dspic
     //! Flag active when the offset has been calibrated successfully
     bool bOffsetCalibration;
     //! Time of the last dsPic reply
-    ros::Time tDsPicReply;
+    rclcpp::Time tDsPicReply;
     //! Flag active when an offset calibration message has been sent to the
     //! dsPic
     bool bSentOffsetCalibration;
@@ -315,20 +314,21 @@ class summit_controller_dspic
     //! Switches motors on/off
     void ToggleMotorPower(unsigned char val);
     //! Callback - command references
-    void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_vel);
+    void cmdVelCallback(
+        const geometry_msgs::msg::Twist::ConstSharedPtr& cmd_vel);
     // void commandCallback(const
     // ackermann_msgs::AckermannDriveStamped::ConstPtr& msg);
     //! Callback - Joystick buttons - Define control mode (kinematic
     //! configuration)
-    void joystickCallback(const sensor_msgs::JoyConstPtr& msg);
+    void joystickCallback(const sensor_msgs::msg::Joy::ConstSharedPtr& msg);
     //! Set odometry service function
     bool set_odometry(
-        robotnik_msgs::set_odometry::Request&  req,
-        robotnik_msgs::set_odometry::Response& res);
+        const robotnik_msgs::srv::SetOdometry_Request& req,
+        robotnik_msgs::srv::SetOdometry_Response&      res);
     //! Set mode service function
     bool set_mode(
-        robotnik_msgs::set_mode::Request&  request,
-        robotnik_msgs::set_mode::Response& response);
+        const robotnik_msgs::srv::SetMode_Request& request,
+        robotnik_msgs::srv::SetMode_Response&      response);
 
    private:
     //! Set new odometry values

@@ -11,22 +11,37 @@
 #include "summit_controller_dspic/summit_controller_dspic.h"
 
 #include <math.h>
-#include <robotnik_msgs/set_mode.h>
-#include <robotnik_msgs/set_odometry.h>  // service
-#include <sensor_msgs/JointState.h>
-#include <std_msgs/Float32.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/convert.h>
+#include <tf2_ros/static_transform_broadcaster.h>
+#include <tf2_ros/transform_broadcaster.h>
 
 #include <cstdlib>
+#include <robotnik_msgs/srv/set_mode.hpp>
+#include <robotnik_msgs/srv/set_odometry.hpp>  // service
+#include <sensor_msgs/msg/joint_state.hpp>
+#include <std_msgs/msg/float32.hpp>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+
+//#if PACKAGE_ROS_VERSION == 1
+//#define ROS12_INFO(...) ROS12_INFO(__VA_ARGS__)
+//#define ROS12_ERROR(...) ROS12_ERROR(__VA_ARGS__)
+//#else
+#define ROS12_INFO(...) RCLCPP_INFO(rclcpp::get_logger("logger"), __VA_ARGS__)
+#define ROS12_ERROR(...) RCLCPP_ERROR(rclcpp::get_logger("logger"), __VA_ARGS__)
+#define ROS12_DEBUG(...) RCLCPP_DEBUG(rclcpp::get_logger("logger"), __VA_ARGS__)
+#define ROS12_WARN(...) RCLCPP_WARN(rclcpp::get_logger("logger"), __VA_ARGS__)
+#define ROS12_FATAL(...) RCLCPP_FATAL(rclcpp::get_logger("logger"), __VA_ARGS__)
+//#endif
 
 using namespace summit_ctrl_dspic;
 
-std::string              port;
+std::string              port = "/dev/ttyUSB0";
 summit_controller_dspic* summit_controller;
 
-const bool   summit_controller_dspic::bLocalOdometry = true;
-const double summit_controller_dspic::fCountsPerRev =
-    33039.36;  // counts per wheel revolution = enc * gearbox = 512 * 64.53 =
-               // 33039.36
+const bool summit_controller_dspic::bLocalOdometry = true;
+// counts per wheel revolution = enc * gearbox = 512 * 64.53 = 33039.36
+const double summit_controller_dspic::fCountsPerRev = 33039.36;
 
 /*!	\fn summit_controller_dspic::dsPic()
  * 	\brief Public constructor
@@ -51,7 +66,8 @@ summit_controller_dspic::summit_controller_dspic(std::string port)
     iErrorType = DSPIC_ERROR_NONE;
     active_kinematic_mode_ =
         DUAL_ACKERMANN_INVERTED;  // DUAL_ACKERMANN_INVERTED; //
-                                  // SINGLE_ACKERMANN;  // Default kinematic mode
+                                  // SINGLE_ACKERMANN;  // Default kinematic
+                                  // mode
 
     // Could be read from parameter yaml file
     dsPic_data.offset1[DSPIC_FWD_DIRECTION] = 5;
@@ -108,25 +124,26 @@ void summit_controller_dspic::SwitchToState(States new_state)
     switch (new_state)
     {
         case INIT_STATE:
-            ROS_INFO("summit_controller_dspic:: switching to INIT state");
+            ROS12_INFO("summit_controller_dspic:: switching to INIT state");
             break;
         case STANDBY_STATE:
-            ROS_INFO("summit_controller_dspic:: switching to STANDBY state");
+            ROS12_INFO("summit_controller_dspic:: switching to STANDBY state");
             break;
         case READY_STATE:
-            ROS_INFO("summit_controller_dspic:: switching to READY state");
+            ROS12_INFO("summit_controller_dspic:: switching to READY state");
             break;
         case EMERGENCY_STATE:
-            ROS_INFO("summit_controller_dspic:: switching to EMERGENCY state");
+            ROS12_INFO(
+                "summit_controller_dspic:: switching to EMERGENCY state");
             break;
         case FAILURE_STATE:
-            ROS_INFO("summit_controller_dspic:: switching to FAILURE state");
+            ROS12_INFO("summit_controller_dspic:: switching to FAILURE state");
             break;
         case SHUTDOWN_STATE:
-            ROS_INFO("summit_controller_dspic:: switching to SHUTDOWN state");
+            ROS12_INFO("summit_controller_dspic:: switching to SHUTDOWN state");
             break;
         default:
-            ROS_ERROR("summit_controller_dspic:: Switching to UNKNOWN state");
+            ROS12_ERROR("summit_controller_dspic:: Switching to UNKNOWN state");
             break;
     }
 }
@@ -165,12 +182,12 @@ int summit_controller_dspic::Open()
     // Setup serial device
     if (this->serial->OpenPort2() == SERIAL_ERROR)
     {
-        ROS_ERROR("summit_controller_dspic::Open: Error Opening Serial Port");
+        ROS12_ERROR("summit_controller_dspic::Open: Error Opening Serial Port");
         SwitchToState(FAILURE_STATE);
         iErrorType = DSPIC_ERROR_OPENING;
         return ERROR;
     }
-    ROS_INFO(
+    ROS12_INFO(
         "summit_controller_dspic::Open: serial port opened at %s",
         serial->GetDevice());
 
@@ -178,11 +195,11 @@ int summit_controller_dspic::Open()
     SendSetTrimmer(DSPIC_FWD_DIRECTION);
     usleep(500000);
     int ret = ReadControllerMsgs();
-    if (ret != OK) ROS_WARN("Couldn't configure trimmer for FWD DIRECTION");
+    if (ret != OK) ROS12_WARN("Couldn't configure trimmer for FWD DIRECTION");
     SendSetTrimmer(DSPIC_BWD_DIRECTION);
     usleep(500000);
     ret = ReadControllerMsgs();
-    if (ret != OK) ROS_WARN("Couldn't configure trimmer for BWD DIRECTION");
+    if (ret != OK) ROS12_WARN("Couldn't configure trimmer for BWD DIRECTION");
 
     // Send 1st command to verify device is working
     SendCalibrateOffsetGyro();
@@ -223,45 +240,45 @@ void summit_controller_dspic::InitState()
     switch (ret)
     {
         case ERROR:  // Nothing received
-            ROS_ERROR("summit_controller_dspic::InitState: received ERROR");
+            ROS12_ERROR("summit_controller_dspic::InitState: received ERROR");
             count_errors_reading++;
             break;
         case ERROR_CRC:
-            ROS_ERROR("summit_controller_dspic::InitState: Error CRC");
+            ROS12_ERROR("summit_controller_dspic::InitState: Error CRC");
             count_errors_reading++;
             break;
         case ERROR_CMD:
-            ROS_ERROR("summit_controller_dspic::InitState: Error CMD");
+            ROS12_ERROR("summit_controller_dspic::InitState: Error CMD");
             count_errors_reading++;
             break;
         case ERROR_OVFL:
-            ROS_ERROR("summit_controller_dspic::InitState: Error OVFL");
+            ROS12_ERROR("summit_controller_dspic::InitState: Error OVFL");
             count_errors_reading++;
             break;
         case ERROR_OVRUN:
-            ROS_ERROR("summit_controller_dspic::InitState: Error OVRUN");
+            ROS12_ERROR("summit_controller_dspic::InitState: Error OVRUN");
             count_errors_reading++;
             break;
         case ERROR_FRAME:
-            ROS_ERROR("summit_controller_dspic::InitState: Error FRAME");
+            ROS12_ERROR("summit_controller_dspic::InitState: Error FRAME");
             count_errors_reading++;
             break;
         case ERROR_OUTRANGE:
-            ROS_ERROR("summit_controller_dspic::InitState: Error OUTofRANGE");
+            ROS12_ERROR("summit_controller_dspic::InitState: Error OUTofRANGE");
             count_errors_reading++;
             break;
         case ERROR_SPI:
-            ROS_ERROR("summit_controller_dspic::InitState: Error SPI");
+            ROS12_ERROR("summit_controller_dspic::InitState: Error SPI");
             // count_errors_reading++;
             break;
         case ERROR_CMDOV:
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::InitState: Error CMDOV - Command "
                 "Overflow");
             count_errors_reading++;
             break;
         case ERROR_PARAMOV:
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::InitState: Error PARAMOV - Parameter "
                 "Overflow");
             count_errors_reading++;
@@ -269,7 +286,7 @@ void summit_controller_dspic::InitState()
         case OK:
             dsPic_data.iEncoderAnt = dsPic_data.iEncoder;
             // Inits dsPic reply timer
-            tDsPicReply = ros::Time::now();
+            tDsPicReply = rclcpp::Clock().now();
             SwitchToState(READY_STATE);
             break;
     }
@@ -284,7 +301,7 @@ void summit_controller_dspic::InitState()
          DSPIC_MAX_ERRORS) /*|| ((count_errors_reading >= DSPIC_MAX_ERRORS))*/)
     {
         iErrorType = DSPIC_ERROR_SERIALCOMM;
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::InitState: %d errors sending, %d errors "
             "reading",
             count_errors_sending, count_errors_reading);
@@ -314,41 +331,42 @@ void summit_controller_dspic::ReadyState()
             count_errors_reading++;
             break;
         case ERROR_CRC:
-            ROS_ERROR("summit_controller_dspic::ReadyState: Error CRC");
+            ROS12_ERROR("summit_controller_dspic::ReadyState: Error CRC");
             count_errors_reading++;
             break;
         case ERROR_CMD:
-            ROS_ERROR("summit_controller_dspic::ReadyState: Error CMD");
+            ROS12_ERROR("summit_controller_dspic::ReadyState: Error CMD");
             count_errors_reading++;
             break;
         case ERROR_OVFL:
-            ROS_ERROR("summit_controller_dspic::ReadyState: Error OVFL");
+            ROS12_ERROR("summit_controller_dspic::ReadyState: Error OVFL");
             count_errors_reading++;
             break;
         case ERROR_OVRUN:
-            ROS_ERROR("summit_controller_dspic::ReadyState: Error OVRUN");
+            ROS12_ERROR("summit_controller_dspic::ReadyState: Error OVRUN");
             count_errors_reading++;
             break;
         case ERROR_FRAME:
-            ROS_ERROR("summit_controller_dspic::ReadyState: Error FRAME");
+            ROS12_ERROR("summit_controller_dspic::ReadyState: Error FRAME");
             count_errors_reading++;
             break;
         case ERROR_OUTRANGE:
-            ROS_ERROR("summit_controller_dspic::ReadyState: Error OUTofRANGE");
+            ROS12_ERROR(
+                "summit_controller_dspic::ReadyState: Error OUTofRANGE");
             count_errors_reading++;
             break;
         case ERROR_SPI:
-            ROS_ERROR("summit_controller_dspic::ReadyState: Error SPI");
+            ROS12_ERROR("summit_controller_dspic::ReadyState: Error SPI");
             // count_errors_reading++;
             break;
         case ERROR_CMDOV:
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ReadyState: Error CMDOV - Command "
                 "Overflow");
             count_errors_reading++;
             break;
         case ERROR_PARAMOV:
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ReadyState: Error PARAMOV - "
                 "Parameter Overflow");
             count_errors_reading++;
@@ -359,8 +377,8 @@ void summit_controller_dspic::ReadyState()
             count_errors_reading = 0;
             // Saves current time
             // Inits nodeguard reply timer
-            tDsPicReply = ros::Time::now();
-            ROS_DEBUG("summit_controller_dspic::ReadyState: Ret = %d", ret);
+            tDsPicReply = rclcpp::Clock().now();
+            ROS12_DEBUG("summit_controller_dspic::ReadyState: Ret = %d", ret);
             break;
     }
 
@@ -435,7 +453,7 @@ void summit_controller_dspic::ReadyState()
     if (count_errors_sending >= DSPIC_MAX_ERRORS)
     {
         iErrorType = DSPIC_ERROR_SERIALCOMM;
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::ReadyState: %d errors sending, %d errors "
             "reading",
             count_errors_sending, count_errors_reading);
@@ -445,15 +463,15 @@ void summit_controller_dspic::ReadyState()
     }
 
     // Checks the communication status
-    ros::Time current_time = ros::Time::now();
-    if (((current_time - tDsPicReply).toSec() > DSPIC_TIMEOUT_COMM) &&
+    rclcpp::Time current_time = rclcpp::Clock().now();
+    if (((current_time - tDsPicReply).seconds() > DSPIC_TIMEOUT_COMM) &&
         !bSentOffsetCalibration)
     {
         // if(diff > 150000 && !bSentOffsetCalibration ){ //
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::ReadyState: Timeout in communication "
             "with the device");
-        tDsPicReply = ros::Time::now();  // Resets the timer
+        tDsPicReply = rclcpp::Clock().now();  // Resets the timer
     }
 }
 
@@ -473,53 +491,54 @@ void summit_controller_dspic::StandbyState()
             count_errors_reading++;
             break;
         case ERROR_CRC:
-            ROS_ERROR("summit_controller_dspic::StandbyState: Error CRC");
+            ROS12_ERROR("summit_controller_dspic::StandbyState: Error CRC");
             count_errors_reading++;
             break;
         case ERROR_CMD:
-            ROS_ERROR("summit_controller_dspic::StandbyState: Error CMD");
+            ROS12_ERROR("summit_controller_dspic::StandbyState: Error CMD");
             count_errors_reading++;
             break;
         case ERROR_OVFL:
-            ROS_ERROR("summit_controller_dspic::StandbyState: Error OVFL");
+            ROS12_ERROR("summit_controller_dspic::StandbyState: Error OVFL");
             count_errors_reading++;
             break;
         case ERROR_OVRUN:
-            ROS_ERROR("summit_controller_dspic::StandbyState: Error OVRUN");
+            ROS12_ERROR("summit_controller_dspic::StandbyState: Error OVRUN");
             count_errors_reading++;
             break;
         case ERROR_FRAME:
-            ROS_ERROR("summit_controller_dspic::StandbyState: Error FRAME");
+            ROS12_ERROR("summit_controller_dspic::StandbyState: Error FRAME");
             count_errors_reading++;
             break;
         case ERROR_OUTRANGE:
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::StandbyState: Error OUTofRANGE");
             count_errors_reading++;
             break;
         case ERROR_SPI:
-            ROS_ERROR("summit_controller_dspic::StandbyState: Error SPI");
+            ROS12_ERROR("summit_controller_dspic::StandbyState: Error SPI");
             // count_errors_reading++;
             break;
         default:
             // Reset if no error arrives
             count_errors_reading = 0;
             // Saves current time, inits nodeguard reply timer
-            tDsPicReply = ros::Time::now();
+            tDsPicReply = rclcpp::Clock().now();
             break;
     }
 
     if (!bSentOffsetCalibration && !bSuccessCalibration)
     {
         ret2 = SendCalibrateOffsetGyro();
-        ROS_INFO("summit_controller_dspic::Standby: Sending calibrate offset");
+        ROS12_INFO(
+            "summit_controller_dspic::Standby: Sending calibrate offset");
     }
     else if (bSuccessCalibration)
     {
         iCmd = DSPIC_CMD_DEFAULT;
         SwitchToState(READY_STATE);
         // Saves current time, inits nodeguard reply timer
-        tDsPicReply = ros::Time::now();
+        tDsPicReply = rclcpp::Clock().now();
     }
 
     if (ret2 == ERROR)
@@ -530,7 +549,7 @@ void summit_controller_dspic::StandbyState()
     if ((count_errors_sending >= DSPIC_MAX_ERRORS))
     {
         iErrorType = DSPIC_ERROR_SERIALCOMM;
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::StandbyState: %d errors sending, %d "
             "errors reading",
             count_errors_sending, count_errors_reading);
@@ -540,13 +559,13 @@ void summit_controller_dspic::StandbyState()
     }
 
     // Checks the communication status
-    ros::Time current_time = ros::Time::now();
-    if ((current_time - tDsPicReply).toSec() > DSPIC_TIMEOUT_COMM)
+    rclcpp::Time current_time = rclcpp::Clock().now();
+    if ((current_time - tDsPicReply).seconds() > DSPIC_TIMEOUT_COMM)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::Standby: Timeout in communication with "
             "the device");
-        tDsPicReply = ros::Time::now();  // Resets the timer
+        tDsPicReply = rclcpp::Clock().now();  // Resets the timer
     }
 }
 
@@ -563,10 +582,10 @@ void summit_controller_dspic::FailureState()
     {  // Try to recover every 'second'
         switch (iErrorType)
         {
-            ROS_INFO(
+            ROS12_INFO(
                 "summit_controller_dspic::FailureState: Trying to recover..");
             case DSPIC_ERROR_OPENING:  // Try to recover
-                ROS_ERROR(
+                ROS12_ERROR(
                     "summit_controller_dspic::FailureState: Recovering from "
                     "failure state (DSPIC_ERROR_OPENING.)");
                 this->Close();
@@ -574,7 +593,7 @@ void summit_controller_dspic::FailureState()
                 this->Open();
                 break;
             case DSPIC_ERROR_SERIALCOMM:
-                ROS_ERROR(
+                ROS12_ERROR(
                     "summit_controller_dspic::FailureState: Recovering from "
                     "failure state (DSPIC_ERROR_SERIALCOMM.)");
                 this->Close();
@@ -582,7 +601,7 @@ void summit_controller_dspic::FailureState()
                 this->Open();
                 break;
             case DSPIC_ERROR_TIMEOUT:
-                ROS_ERROR(
+                ROS12_ERROR(
                     "summit_controller_dspic::FailureState: Recovering from "
                     "failure state (DSPIC_ERROR_TIMEOUT.)");
                 this->Close();
@@ -601,17 +620,17 @@ void summit_controller_dspic::FailureState()
  */
 int summit_controller_dspic::ReadControllerMsgs()
 {
-    int  read_bytes = 0;  // Number of received bytes
-    int  ret        = ERROR;
+    int  read_bytes      = 0;  // Number of received bytes
+    int  ret             = ERROR;
     char cReadBuffer[64] = "\0";
 
-    // ROS_INFO("summit_controller_dspic::ReadControllerMsgs: Reading...");
+    // ROS12_INFO("summit_controller_dspic::ReadControllerMsgs: Reading...");
     // Reads the response
     // while((n=serial->ReadPort(cReadBuffer, 64)) > 0){
 
     if (serial->ReadPort(cReadBuffer, &read_bytes, 64) == ERROR)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::ReadControllerMsgs: Error reading port");
         return ERROR;
     }
@@ -629,7 +648,7 @@ int summit_controller_dspic::ReadControllerMsgs()
         if (serial->ReadPort(cReadBuffer, &read_bytes, 64) == ERROR)
         {
             // Verificar. En ppio da igual si lee o no.
-            // ROS_ERROR("summit_controller_dspic::ReadControllerMsgs: Error
+            // ROS12_ERROR("summit_controller_dspic::ReadControllerMsgs: Error
             // after 1st port read"); return ERROR;
             ret = OK;
         }
@@ -649,12 +668,12 @@ int summit_controller_dspic::SendResetController()
     int  written_bytes = 0;
 
     sprintf(cMsg, "%s\r", RESET_CONTROLLER);
-    ROS_INFO(
+    ROS12_INFO(
         "summit_controller_dspic::SendResetController: Sending reset command");
     // Sends the message
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendResetController: Error sending "
             "message");
         return ERROR;
@@ -679,7 +698,7 @@ int summit_controller_dspic::SendResetOdometry()
     sprintf(cMsg, "%s\r", INIT_ODOMETRY);
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendResetOdometry: Error sending "
             "message");
         return ERROR;
@@ -703,7 +722,7 @@ int summit_controller_dspic::SendModifyOdometry(double x, double y, double yaw)
     sprintf(cMsg, "%s,%5.3f,%5.3f,%5.3f", SET_ODOMETRY, x, y, yaw);
     crc = ComputeCRC(cMsg, 32);
     sprintf(cMsg2, "%s,%5.3f,%5.3f,%5.3f,%d\r", SET_ODOMETRY, x, y, yaw, crc);
-    ROS_INFO(
+    ROS12_INFO(
         "summit_controller_dspic::SendModifyOdometry: Sending "
         "%s,%5.3f,%5.3f,%5.3f,%d to device",
         SET_ODOMETRY, x, y, yaw, crc);
@@ -711,7 +730,7 @@ int summit_controller_dspic::SendModifyOdometry(double x, double y, double yaw)
     // Sends the message
     if (serial->WritePort(cMsg2, &written_bytes, strlen(cMsg2)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendModifyOdometry: Error sending "
             "message");
         return ERROR;
@@ -735,13 +754,13 @@ int summit_controller_dspic::SendInitOdometry()
 
     // Prepare init odometry message
     sprintf(cMsg, "%s\r", INIT_ODOMETRY);
-    ROS_INFO(
+    ROS12_INFO(
         "summit_controller_dspic::SendInitOdometry: Sending %s to device",
         INIT_ODOMETRY);
     // Send the message
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendInitOdometry: Error sending message");
         return ERROR;
     }
@@ -767,14 +786,14 @@ int summit_controller_dspic::SendSetDWheels(double distance)
     sprintf(cMsg, "%s,%2.5f", SET_DWHEELS, distance);
     crc = ComputeCRC(cMsg, 32);
     sprintf(cMsg2, "%s,%2.5f,%d\r", SET_DWHEELS, distance, crc);
-    ROS_INFO(
+    ROS12_INFO(
         "summit_controller_dspic::SendSetDWheels: Sending %s,%2.5f,%d to "
         "device",
         SET_DWHEELS, distance, crc);
     // Send the message
     if (serial->WritePort(cMsg2, &written_bytes, strlen(cMsg2)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendSetDWheels: Error sending message");
         return ERROR;
     }
@@ -799,14 +818,14 @@ int summit_controller_dspic::SendSetRPMtoMPS(double value)
     sprintf(cMsg, "%s,%2.9f", SET_RPM2MPS, value);
     crc = ComputeCRC(cMsg, 32);
     sprintf(cMsg2, "%s,%2.9f,%d\r", SET_RPM2MPS, value, crc);
-    ROS_INFO(
+    ROS12_INFO(
         "summit_controller_dspic::SendSetRPMtoMPS: Sending %s,%2.9f,%d to "
         "device",
         SET_RPM2MPS, value, crc);
     // Send the message
     if (serial->WritePort(cMsg2, &written_bytes, strlen(cMsg2)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendSetRPMtoMPS: Error sending message");
         return ERROR;
     }
@@ -828,13 +847,13 @@ int summit_controller_dspic::SendReadOdometry()
 
     // Prepare message
     sprintf(cMsg, "%s\r", GET_ODOMETRY);
-    // ROS_INFO("summit_controller_dspic::SendReadOdometry: Sending %s to
+    // ROS12_INFO("summit_controller_dspic::SendReadOdometry: Sending %s to
     // device", GET_ODOMETRY);
 
     // Send the message
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendReadOdometry: Error sending message");
         return ERROR;
     }
@@ -856,13 +875,13 @@ int summit_controller_dspic::SendReadParameters()
 
     // Prepare message
     sprintf(cMsg, "%s\r", GET_PARAMETERS);
-    // ROS_INFO("summit_controller_dspic::SendReadParameters: Sending %s to
+    // ROS12_INFO("summit_controller_dspic::SendReadParameters: Sending %s to
     // device", GET_PARAMETERS);
 
     // Send the message
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendReadParameters: Error sending "
             "message");
         return ERROR;
@@ -888,7 +907,7 @@ int summit_controller_dspic::SendReadEncoder()
     sprintf(cMsg, "%s\r", GET_ENCODER);
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendReadEncoder: Error sending message");
         return ERROR;
     }
@@ -909,7 +928,7 @@ int summit_controller_dspic::SendReadEncoderGyro()
     sprintf(cMsg, "%s\r", GET_ENCODER_GYRO);
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendReadEncoderGyro: Error sending "
             "message");
         return ERROR;
@@ -932,7 +951,7 @@ int summit_controller_dspic::SendCalibrateOffsetGyro()
     // Sends the message
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendCalibrateOffsetGyro: Error sending "
             "message");
         return ERROR;
@@ -974,10 +993,10 @@ int summit_controller_dspic::SendSetMotorReferences(double rad, double mps)
         sprintf(cMsg, "%s,0.0,0.0,0.0\r", SET_MOTOR_REFERENCES);
 
     crc = ComputeCRC(cMsg, 32);
-    ROS_DEBUG(
+    ROS12_DEBUG(
         "summit_controller_dspic - Motor References %s,%2.3f,%2.3f,%d\r",
         SET_MOTOR_REFERENCES, rad, mps, crc);
-    ROS_DEBUG(
+    ROS12_DEBUG(
         "summit_controller_dspic::SendSetMotorReferences: Sending "
         "%s,%2.3f,%2.3f,%d to device",
         SET_MOTOR_REFERENCES, rad, mps, crc);
@@ -985,7 +1004,7 @@ int summit_controller_dspic::SendSetMotorReferences(double rad, double mps)
     // Sends the message
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendSetMotorReferences: Error sending "
             "message");
         return ERROR;
@@ -1011,12 +1030,12 @@ int summit_controller_dspic::SendSetTrimmer(int channel)
     sprintf(
         cMsg, "%s,%d,%d,%d,%d\r", SET_TRIMMER, channel, offset1, center,
         offset2);
-    ROS_INFO(
+    ROS12_INFO(
         "SendSetTrimmer %s,%d,%d,%d,%d", SET_TRIMMER, channel, offset1, center,
         offset2);
     if (serial->WritePort(cMsg, &written_bytes, strlen(cMsg)) != OK)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::SendSetTrimmer: Error sending message");
         return ERROR;
     }
@@ -1034,7 +1053,7 @@ unsigned char summit_controller_dspic::ComputeCRC(char* string, int size)
     while ((string[j] != 0) && (j < size))
     {
         crc += string[j];
-        // ROS_INFO(" char[%d] -> %c = %d, crc = %d", j, string[j], string[j],
+        // ROS12_INFO(" char[%d] -> %c = %d, crc = %d", j, string[j], string[j],
         // (int)crc);
         j++;
     }
@@ -1074,18 +1093,18 @@ int summit_controller_dspic::ProcessMsg(char* msg)
 
     if (i == 0)
     {
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::ProcessMsg: nothing for processing");
         return ERROR;
     }
-    // ROS_INFO(cReceivedTokens[0]);
+    // ROS12_INFO(cReceivedTokens[0]);
 
     // Process the received response
     // Errors from device
     if (!strcmp(cReceivedTokens[0], "ERROR"))
     {
         num_error = atoi(cReceivedTokens[1]);
-        ROS_ERROR(
+        ROS12_ERROR(
             "summit_controller_dspic::ProcessMsg: Error from device: %s,%s",
             cReceivedTokens[0], cReceivedTokens[1]);
         return num_error;
@@ -1096,7 +1115,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     {
         if (!strcmp(cReceivedTokens[1], "Robotnik"))
         {
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ProcessMsg: dsPIC board reseted !!!");
             return BOARD_RESET;
         }
@@ -1105,8 +1124,8 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     // Standard commands
     if (!strcmp(cReceivedTokens[0], GET_ODOMETRY) && !bLocalOdometry)
     {
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Odometry: x = %s, y =
-        // %s, th = %s, crc %s", cReceivedTokens[1], cReceivedTokens[2],
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Odometry: x = %s, y
+        // = %s, th = %s, crc %s", cReceivedTokens[1], cReceivedTokens[2],
         //			cReceivedTokens[3], cReceivedTokens[4]);
         x            = atof(cReceivedTokens[1]);
         y            = atof(cReceivedTokens[2]);
@@ -1114,7 +1133,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         received_crc = atoi(cReceivedTokens[4]);
         sprintf(command, "%s,%5.3f,%5.3f,%5.3f", GET_ODOMETRY, x, y, th);
         crc = ComputeCRC(command, 32);
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Converted odom: x =
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Converted odom: x =
         // %5.3f, y = %5.3f, th = %5.3f, crc (%d, %d)", x, y, th, received_crc,
         // crc);
         // If data arrived correctly
@@ -1127,7 +1146,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         }
         else
         {
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ProcessMsg: Get Odometry: Error crc: "
                 "rec = %d, calc = %d",
                 received_crc, crc);
@@ -1137,7 +1156,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     }
     if (!strcmp(cReceivedTokens[0], SET_ODOMETRY))
     {
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Set odometry OK: x =
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Set odometry OK: x =
         // %s, y = %s, th = %s, crc %s", cReceivedTokens[1], cReceivedTokens[2],
         //			cReceivedTokens[3], cReceivedTokens[4] );
         x            = atof(cReceivedTokens[1]);
@@ -1146,11 +1165,11 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         received_crc = atoi(cReceivedTokens[4]);
         sprintf(command, "%s,%5.3f,%5.3f,%5.3f", SET_ODOMETRY, x, y, th);
         crc = ComputeCRC(command, 32);
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Converted odom: x =
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Converted odom: x =
         // %f. y = %f, th = %f, crc (%d, %d)", x, y, th, received_crc, crc);
         if (crc != received_crc)
         {
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ProcessMsg: Set odometry: Error crc: "
                 "recv = %d, calc = %d",
                 received_crc, crc);
@@ -1161,23 +1180,23 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     }
     if (!strcmp(cReceivedTokens[0], INIT_ODOMETRY))
     {
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Init odometry OK: %s",
-        // cReceivedTokens[1]);
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Init odometry OK:
+        // %s", cReceivedTokens[1]);
         return OK_INIT_ODOMETRY;
     }
     if (!strcmp(cReceivedTokens[0], SET_DWHEELS))
     {
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Set DWHEELS: D = %s,
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Set DWHEELS: D = %s,
         // crc %s", cReceivedTokens[1], cReceivedTokens[2]);
         d            = atof(cReceivedTokens[1]);
         received_crc = atoi(cReceivedTokens[2]);
         sprintf(command, "%s,%2.5f", SET_DWHEELS, d);
         crc = ComputeCRC(command, 32);
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: converted Dwheels : d
-        // = %f, crc (%d, %d)", d, received_crc, crc);
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: converted Dwheels :
+        // d = %f, crc (%d, %d)", d, received_crc, crc);
         if (crc != received_crc)
         {
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ProcessMsg: Set Dwheels: Error crc: "
                 "recv = %d, calc = %d",
                 received_crc, crc);
@@ -1188,7 +1207,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     }
     if (!strcmp(cReceivedTokens[0], SET_RPM2MPS))
     {
-        ROS_INFO(
+        ROS12_INFO(
             "summit_controller_dspic::ProcessMsg: Set Rpm2mps: value = %s, crc "
             "%s",
             cReceivedTokens[1], cReceivedTokens[2]);
@@ -1196,11 +1215,11 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         received_crc = atoi(cReceivedTokens[2]);
         sprintf(command, "%s,%2.9f", SET_RPM2MPS, r);
         crc = ComputeCRC(command, 32);
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: converted : r = %f,
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: converted : r = %f,
         // crc (%d, %d)", r, received_crc, crc);
         if (crc != received_crc)
         {
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ProcessMsg: Set rpm2mps: Error crc: "
                 "recv = %d, calc = %d",
                 received_crc, crc);
@@ -1211,7 +1230,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     }
     if (!strcmp(cReceivedTokens[0], GET_PARAMETERS))
     {
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Parameters: d=%s,
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Parameters: d=%s,
         // r=%s, crc%s", cReceivedTokens[1], cReceivedTokens[2],
         //	cReceivedTokens[3]);
         d            = atof(cReceivedTokens[1]);
@@ -1220,8 +1239,8 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         // memset(command, 0, 64);
         sprintf(command, "%s,%2.5f,%2.9f", GET_PARAMETERS, d, r);
         crc = ComputeCRC(command, 64);
-        // ROS_INFO("summit_controller_dspic::ProcessMsg: Converted params: d =
-        // %2.5f, r = %2.9f, l = %2.9f, crc (%d, %d)", d, r, l, received_crc,
+        // ROS12_INFO("summit_controller_dspic::ProcessMsg: Converted params: d
+        // = %2.5f, r = %2.9f, l = %2.9f, crc (%d, %d)", d, r, l, received_crc,
         // crc); if(crc == received_crc){
         // update value (if data arrived OK)
         dsPic_data.dDWheels  = d;
@@ -1231,14 +1250,14 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     }
     if (!strcmp(cReceivedTokens[0], GET_ENCODER))
     {
-        ROS_INFO(
+        ROS12_INFO(
             "summit_controller_dspic::ProcessMsg: Encoder: = %s, crc=%s",
             cReceivedTokens[1], cReceivedTokens[2]);
         enc = atoi(cReceivedTokens[1]);
         // received_crc = atoi(cReceivedTokens[2]);
         // memset(command, 0, 64);
         // sprintf(command,"%s,%d", GET_ENCODER, enc);
-        // ROS_INFO(command);
+        // ROS12_INFO(command);
         // crc = ComputeCRC(command, 64);
         // if(crc == received_crc){
         // Update values (if data arrived OK)
@@ -1256,7 +1275,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         memset(command, 0, 64);
         sprintf(
             command, "%s,%d,%2.5lf,%2.2lf", GET_ENCODER_GYRO, enc, th, batt);
-        // ROS_INFO(command);
+        // ROS12_INFO(command);
         crc = ComputeCRC(command, 64);
         // Si los datos han llegado correctamente
         if (crc == received_crc)
@@ -1269,7 +1288,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         }
         else
         {
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ProcessMsg: Get Encoder & Gyro: "
                 "Error crc: rec = %d, calc = %d",
                 received_crc, crc);
@@ -1280,7 +1299,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
     }
     if (!strcmp(cReceivedTokens[0], CALIBRATE_OFFSET))
     {
-        // ROS_INFO(" [%s,%s]", CALIBRATE_OFFSET,cReceivedTokens[1]);
+        // ROS12_INFO(" [%s,%s]", CALIBRATE_OFFSET,cReceivedTokens[1]);
         if (!strcmp(cReceivedTokens[1], "OK\r"))
         {
             pthread_mutex_lock(&mutex_odometry);
@@ -1291,12 +1310,12 @@ int summit_controller_dspic::ProcessMsg(char* msg)
             bSentOffsetCalibration = false;
             bSuccessCalibration    = true;
             pthread_mutex_unlock(&mutex_odometry);
-            ROS_INFO(
+            ROS12_INFO(
                 "summit_controller_dspic::ProcessMsg: Calibrate offset OK");
         }
         else
         {
-            ROS_ERROR(
+            ROS12_ERROR(
                 "summit_controller_dspic::ProcessMsg: Error receiving "
                 "calibrate offset confirmation");
             bSentOffsetCalibration = false;
@@ -1311,7 +1330,7 @@ int summit_controller_dspic::ProcessMsg(char* msg)
         int offset1 = atoi(cReceivedTokens[2]);
         int center  = atoi(cReceivedTokens[3]);
         int offset2 = atoi(cReceivedTokens[4]);
-        // ROS_INFO("RECEIVED %d, %d, %d, %d", channel, offset1, center,
+        // ROS12_INFO("RECEIVED %d, %d, %d, %d", channel, offset1, center,
         // offset2); Check if data received matches data sent
         if ((channel >= 0) and (channel <= 3))
         {
@@ -1341,12 +1360,12 @@ void summit_controller_dspic::ToggleMotorPower(unsigned char val)
     {
         case '1':  // Enable Motor
             this->dsPic_data.bMotorsEnabled = true;
-            ROS_INFO(
+            ROS12_INFO(
                 "summit_controller_dspic::ToggleMotorPower: Motors enabled");
             break;
         case '0':  // Disable Motor
             this->dsPic_data.bMotorsEnabled = false;
-            ROS_INFO(
+            ROS12_INFO(
                 "summit_controller_dspic::ToggleMotorPower: Motors disabled");
             break;
     }
@@ -1507,7 +1526,7 @@ void summit_controller_dspic::SetMotorReferences(double rads, double mps)
     else if ((mps > 0.0) && (mps > MOTOR_DEF_MAX_SPEED))
         mps = MOTOR_DEF_MAX_SPEED;
 
-    ROS_DEBUG(
+    ROS12_DEBUG(
         "summit_controller_dspic::SetMotorReferences: v=%2.3f a=%2.3f", rads,
         mps);
 
@@ -1597,11 +1616,11 @@ void summit_controller_dspic::GetMotorReferences(double* rad, double* mps)
  */
 double summit_controller_dspic::GetSamplingPeriod()
 {
-    static bool      first = true;
-    static ros::Time now, last;
-    double           secs = 0.0;
+    static bool         first = true;
+    static rclcpp::Time now, last;
+    double              secs = 0.0;
 
-    now = ros::Time::now();
+    now = rclcpp::Clock().now();
 
     if (first)
     {
@@ -1610,7 +1629,7 @@ double summit_controller_dspic::GetSamplingPeriod()
         return -1.0;
     }
 
-    secs = (now - last).toSec();
+    secs = (now - last).seconds();
     last = now;
     return secs;
 }
@@ -1684,17 +1703,17 @@ void summit_controller_dspic::UpdateOdometry()
  * geometry_msgs::Twist::ConstPtr& cmd_vel) Callback - velocity references
  */
 void summit_controller_dspic::cmdVelCallback(
-    const geometry_msgs::Twist::ConstPtr& cmd_vel)
+    const geometry_msgs::msg::Twist::ConstSharedPtr& cmd_vel)
 // void summit_controller_dspic::commandCallback(const
 // ackermann_msgs::AckermannDriveStamped::ConstPtr& msg) \fn void
-//summit_controller_dspic::cmdVelCallback(const
-//ackermann_msgs::AckermannDriveStamped::ConstPtr& msg)
+// summit_controller_dspic::cmdVelCallback(const
+// ackermann_msgs::AckermannDriveStamped::ConstPtr& msg)
 {
     // SetMotorReferences(double rads, double mps)
     this->SetMotorReferences(cmd_vel->angular.z, cmd_vel->linear.x);
     // this->SetMotorReferences(msg->drive.steering_angle, msg->drive.speed);
 
-    // ROS_INFO("summit_controller_dspic::commandCallback speed=%5.2f
+    // ROS12_INFO("summit_controller_dspic::commandCallback speed=%5.2f
     // angle=%5.2f", msg->drive.speed, msg->drive.steering_angle);
 }
 
@@ -1703,33 +1722,33 @@ void summit_controller_dspic::cmdVelCallback(
  * mode (kinematic configuration)
  */
 void summit_controller_dspic::joystickCallback(
-    const sensor_msgs::JoyConstPtr& msg)
+    const sensor_msgs::msg::Joy::ConstSharedPtr& msg)
 {
     //	static bool bRecoveryButtons[4] = {false, false, false, false}; // Need
-    //to press first 4 buttons to recovery 	for (int i=0; i<4; i++)
+    // to press first 4 buttons to recovery 	for (int i=0; i<4; i++)
     //          if ( msg->buttons[i] == 1 ) bRecoveryButtons[i] = true;
 
     if (msg->buttons[0] == 1)
     {
         //        if (!dual_mode_) dual_mode_= true;
         //        else dual_mode_ = false;
-        ROS_INFO("SET MOTOR POWER ON");
+        ROS12_INFO("SET MOTOR POWER ON");
         this->ToggleMotorPower('1');
     }
     if (msg->buttons[1] == 1)
     {
         //          if (!paralel_mode_) paralel_mode_ = true;
         //          else paralel_mode_ = false;
-        ROS_INFO("SET MOTOR POWER OFF");
+        ROS12_INFO("SET MOTOR POWER OFF");
         this->ToggleMotorPower('0');
     }
 
     /*
             // Checks the communication status
-            ros::Time current_time = ros::Time::now();
-            if ( (current_time - tDsPicReply).toSec() > DSPIC_TIMEOUT_COMM) {
-                    ROS_ERROR("summit_controller_dspic::Standby: Timeout in
-       communication with the device"); tDsPicReply = ros::Time::now();  //
+            rclcpp::Time current_time = rclcpp::Clock().now();
+            if ( (current_time - tDsPicReply).seconds() > DSPIC_TIMEOUT_COMM) {
+                    ROS12_ERROR("summit_controller_dspic::Standby: Timeout in
+       communication with the device"); tDsPicReply = rclcpp::Clock().now();  //
        Resets the timer
             }
     */
@@ -1739,10 +1758,10 @@ void summit_controller_dspic::joystickCallback(
  *      Sets the odometry of the robot
  */
 bool summit_controller_dspic::set_odometry(
-    robotnik_msgs::set_odometry::Request&  req,
-    robotnik_msgs::set_odometry::Response& res)
+    const robotnik_msgs::srv::SetOdometry_Request& req,
+    robotnik_msgs::srv::SetOdometry_Response&      res)
 {
-    ROS_INFO(
+    ROS12_INFO(
         "summit_xl_controller::set_odometry: request -> x = %f, y = %f, a = %f",
         req.x, req.y, req.orientation);
 
@@ -1756,8 +1775,8 @@ bool summit_controller_dspic::set_odometry(
  *      Sets the kinematic mode
  */
 bool summit_controller_dspic::set_mode(
-    robotnik_msgs::set_mode::Request&  request,
-    robotnik_msgs::set_mode::Response& response)
+    const robotnik_msgs::srv::SetMode_Request& request,
+    robotnik_msgs::srv::SetMode_Response&      response)
 {
     // 1 - SINGLE ACKERMANN
     // 2 - DUAL ACKERMANN INVERTED forward and backward axes turn opposite
@@ -1765,7 +1784,7 @@ bool summit_controller_dspic::set_mode(
     if (request.mode == SINGLE_ACKERMANN)
     {
         active_kinematic_mode_ = request.mode;
-        ROS_INFO(
+        ROS12_INFO(
             "summit_controller_dspic:  change kinematic mode to "
             "SINGLE_ACKERMANN");
         return true;
@@ -1773,7 +1792,7 @@ bool summit_controller_dspic::set_mode(
     if (request.mode == DUAL_ACKERMANN_INVERTED)
     {
         active_kinematic_mode_ = request.mode;
-        ROS_INFO(
+        ROS12_INFO(
             "summit_controller_dspic:  change kinematic mode to "
             "DUAL_ACKERMANN_INVERTED");
         return true;
@@ -1781,7 +1800,7 @@ bool summit_controller_dspic::set_mode(
     if (request.mode == DUAL_ACKERMANN_GEARED)
     {
         active_kinematic_mode_ = request.mode;
-        ROS_INFO(
+        ROS12_INFO(
             "summit_controller_dspic:  change kinematic mode to "
             "DUAL_ACKERMANN_GEARED");
         return true;
@@ -1801,34 +1820,34 @@ std::string prefixTopic(std::string prefix, char* name)
 // MAIN
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "summit_controller_dspic_node");
-    // ROS_INFO("Summit controller for ROS %.2f", NODE_VERSION);
+    rclcpp::init(argc, argv);
+    auto n = rclcpp::Node::make_shared("summit_controller_dspic_node");
+
+    // ROS12_INFO("Summit controller for ROS %.2f", NODE_VERSION);
     int time_remaining = -1;
 
-    ros::NodeHandle n;
-    ros::NodeHandle pn("~");
+    n->get_parameter("port", port);
+    ROS12_INFO("summit_controller_dspic - port=%s", port.c_str());
 
-    pn.param<std::string>("port", port, "/dev/ttyUSB0");
-    ROS_INFO("summit_controller_dspic - port=%s", port.c_str());
-
-    std::string base_frame_id;
-    std::string odom_frame_id;
-    pn.param<std::string>("base_frame_id", base_frame_id, "base_footprint");
-    pn.param<std::string>("odom_frame_id", odom_frame_id, "odom");
+    std::string base_frame_id = "base_footprint";
+    std::string odom_frame_id = "odom";
+    n->get_parameter("base_frame_id", base_frame_id);
+    n->get_parameter("odom_frame_id", odom_frame_id);
 
     // Create node object
     summit_controller = new summit_controller_dspic(port);
 
     // Publishing
-    ros::Publisher odom_pub    = n.advertise<nav_msgs::Odometry>("/odom", 50);
-    ros::Publisher battery_pub = n.advertise<std_msgs::Float32>("/battery", 5);
-    ros::Publisher joint_state_pub_;
+    auto odom_pub = n->create_publisher<nav_msgs::msg::Odometry>("/odom", 50);
+    auto battery_pub =
+        n->create_publisher<std_msgs::msg::Float32>("/battery", 5);
+    // rclcpp::Publisher joint_state_pub_;
 
     // Joint states
-    sensor_msgs::JointState robot_joints_;
+    sensor_msgs::msg::JointState robot_joints_;
 
     // Initialize joints array
-    char j[3] = "\0";
+    char j[5] = "\0";
     for (int i = 0; i < SUMMIT_JOINTS; i++)
     {
         sprintf(j, "j%d", i + 1);
@@ -1854,46 +1873,59 @@ int main(int argc, char** argv)
     robot_joints_.name[8] = "joint_camera_pan";
     robot_joints_.name[9] = "joint_camera_tilt";
 
-    tf::TransformBroadcaster tf_broadcaster;
+    tf2_ros::TransformBroadcaster       tf_broadcaster(n);
+    tf2_ros::StaticTransformBroadcaster tf_broadcaster_static(n);
+
     // Subcscribing
-    ros::Subscriber cmd_vel_sub = n.subscribe<geometry_msgs::Twist>(
-        "/cmd_vel", 1, &summit_controller_dspic::cmdVelCallback,
-        summit_controller);
+    auto cmd_vel_sub = n->create_subscription<geometry_msgs::msg::Twist>(
+        "/cmd_vel", 1, [](const geometry_msgs::msg::Twist::ConstSharedPtr& m) {
+            summit_controller->cmdVelCallback(m);
+        });
 
     // Subscribe to command topic
-    // ros::Subscriber cmd_sub_ =
+    // rclcpp::Subscriber cmd_sub_ =
     // n.subscribe<ackermann_msgs::AckermannDriveStamped>("/summit/command", 1,
     // &summit_controller_dspic::commandCallback, summit_controller);
 
-    ros::Subscriber joy_sub = n.subscribe<sensor_msgs::Joy>(
-        "/joy", 1, &summit_controller_dspic::joystickCallback,
-        summit_controller);
+    auto joy_sub = n->create_subscription<sensor_msgs::msg::Joy>(
+        "/joy", 1,  //
+        [](const sensor_msgs::msg::Joy::ConstSharedPtr& m) {
+            summit_controller->joystickCallback(m);
+        });
 
     // Service set_odometry
-    ros::ServiceServer service_odom = n.advertiseService(
-        "set_odometry", &summit_controller_dspic::set_odometry,
-        summit_controller);
-    ros::ServiceServer service_mode = n.advertiseService(
-        "/summit_controller_dspic/set_mode", &summit_controller_dspic::set_mode,
-        summit_controller);
+    auto service_odom = n->create_service<robotnik_msgs::srv::SetOdometry>(
+        "set_odometry",
+        [](const robotnik_msgs::srv::SetOdometry_Request::ConstSharedPtr req,
+           robotnik_msgs::srv::SetOdometry_Response::SharedPtr           resp) {
+            summit_controller->set_odometry(*req, *resp);
+        });
+
+    auto service_mode = n->create_service<robotnik_msgs::srv::SetMode>(
+        "/summit_controller_dspic/set_mode",
+        [](const robotnik_msgs::srv::SetMode_Request::ConstSharedPtr req,
+           robotnik_msgs::srv::SetMode_Response::SharedPtr           resp) {
+            summit_controller->set_mode(*req, *resp);
+        });
 
     if (summit_controller->Open() == OK)
-        ROS_INFO("Connected to Summit Controller Dspic.");
+        ROS12_INFO("Connected to Summit Controller Dspic.");
     else
     {
-        ROS_FATAL("Could not connect to Summit Controller Dspic.");
+        ROS12_FATAL("Could not connect to Summit Controller Dspic.");
+        rclcpp::shutdown();
         //	ROS_BREAK();
     }
 
-    ros::Time current_time, last_time;
-    current_time = ros::Time::now();
-    last_time    = ros::Time::now();
+    rclcpp::Time current_time, last_time;
+    current_time = rclcpp::Clock().now();
+    last_time    = rclcpp::Clock().now();
 
-    ros::Rate r(40.0);
-    while (n.ok())
+    rclcpp::Rate r(40.0);
+    while (rclcpp::ok())
     {
-        current_time = ros::Time::now();
-        // dt = (current_time - last_time).toSec();
+        current_time = rclcpp::Clock().now();
+        // dt = (current_time - last_time).seconds();
 
         // 1 State Machine
         summit_controller->StateMachine();
@@ -1901,7 +1933,7 @@ int main(int argc, char** argv)
         // 2 Publish
         // ******************************************************************************************
         // first, we'll publish the transforms over tf
-        geometry_msgs::TransformStamped odom_trans;
+        geometry_msgs::msg::TransformStamped odom_trans;
         odom_trans.header.stamp    = current_time;
         odom_trans.header.frame_id = odom_frame_id;
         odom_trans.child_frame_id  = base_frame_id;
@@ -1910,13 +1942,16 @@ int main(int argc, char** argv)
         odom_trans.transform.translation.y =
             summit_controller->dsPic_data.odometry_y;
         odom_trans.transform.translation.z = 0.0;
-        odom_trans.transform.rotation      = tf::createQuaternionMsgFromYaw(
-            summit_controller->dsPic_data.odometry_yaw);
+
+        tf2::Quaternion q;
+        q.setRPY(0, 0, summit_controller->dsPic_data.odometry_yaw);
+        odom_trans.transform.rotation = tf2::toMsg(q);
+
         tf_broadcaster.sendTransform(odom_trans);
 
         // ******************************************************************************************
         // next, we'll publish the odometry message over ROS
-        nav_msgs::Odometry odom;
+        nav_msgs::msg::Odometry odom;
         odom.header.stamp    = current_time;
         odom.header.frame_id = odom_frame_id;
 
@@ -1924,8 +1959,7 @@ int main(int argc, char** argv)
         odom.pose.pose.position.x  = summit_controller->dsPic_data.odometry_x;
         odom.pose.pose.position.y  = summit_controller->dsPic_data.odometry_y;
         odom.pose.pose.position.z  = 0.0;
-        odom.pose.pose.orientation = tf::createQuaternionMsgFromYaw(
-            summit_controller->dsPic_data.odometry_yaw);
+        odom.pose.pose.orientation = tf2::toMsg(q);
 
         // set the velocity
         odom.child_frame_id        = base_frame_id;
@@ -1934,17 +1968,17 @@ int main(int argc, char** argv)
         odom.twist.twist.angular.z = summit_controller->dsPic_data.vel_yaw;
 
         // publish the message
-        odom_pub.publish(odom);
-        // ROS_INFO("Odometria -> x = %f, y = %f", odom.pose.pose.position.x,
+        odom_pub->publish(odom);
+        // ROS12_INFO("Odometria -> x = %f, y = %f", odom.pose.pose.position.x,
         // odom.pose.pose.position.y);
 
         // ******************************************************************************************
         // publish battery
-        std_msgs::Float32 battery;
+        std_msgs::msg::Float32 battery;
         battery.data = (float)summit_controller->dsPic_data.dBatt;
-        battery_pub.publish(battery);
+        battery_pub->publish(battery);
 
-        ros::spinOnce();
+        rclcpp::spin_some(n);
         r.sleep();
     }
 

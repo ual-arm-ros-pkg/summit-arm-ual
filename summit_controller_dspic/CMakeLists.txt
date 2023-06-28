@@ -17,15 +17,19 @@ find_package(tf2_geometry_msgs REQUIRED)
 add_executable(${PROJECT_NAME}
   src/summit_controller_dspic.cpp
   src/SerialDevice.cc
+  include/summit_controller_dspic/summit_controller_dspic.h
+  include/summit_controller_dspic/SerialDevice.h
 )
 
 ament_target_dependencies(${PROJECT_NAME}
+  ackermann_msgs
   rclcpp
   geometry_msgs
   nav_msgs
   sensor_msgs
   tf2
   tf2_geometry_msgs
+  robotnik_msgs
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
