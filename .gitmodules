@@ -1,3 +1,0 @@
-[submodule "robotnik_msgs"]
-	path = robotnik_msgs
-	url = https://github.com/RobotnikAutomation/robotnik_msgs.git
