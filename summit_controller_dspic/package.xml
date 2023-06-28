@@ -1,37 +1,33 @@
-<package>
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>summit_controller_dspic</name>
-  <version>0.1.0</version>
+  <version>1.1.0</version>
   <description>summit_controller_dspic</description>
   <maintainer email="info@robotnik.es">Robotnik</maintainer>
+  <maintainer email="jlblanco@ual.es">Jose Luis Blanco Claraco</maintainer>
 
   <author>Robotnik</author>
   <license>BSD</license>
   <url>http://ros.org/wiki/summit_controller_dspic</url>
 
-  <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>roscpp</build_depend>
-  <build_depend>tf</build_depend>
-  <build_depend>nav_msgs</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <build_depend>robotnik_msgs</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>diagnostic_updater</build_depend>
-  <build_depend>ackermann_msgs</build_depend>
- 
-  <run_depend>roscpp</run_depend>
-  <run_depend>tf</run_depend>
-  <run_depend>nav_msgs</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>sensor_msgs</run_depend>
-  <run_depend>robotnik_msgs</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>diagnostic_updater</run_depend>
-  <run_depend>ackermann_msgs</run_depend>
+  <build_depend>ros_environment</build_depend>
+  <buildtool_depend>cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>ackermann_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>robotnik_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>tf2</depend>
 
   <export>
-	<cpp cflags="-I${prefix}/include  -I${prefix}/srv_gen/cpp/include -I${prefix}/msg_gen/cpp/include"/>
+    <build_type>ament_cmake</build_type>
   </export>
 
 </package>

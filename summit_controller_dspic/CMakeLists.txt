@@ -1,68 +1,59 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.9)
 project(summit_controller_dspic)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS 
-    roscpp
-    tf
-    nav_msgs 
-	geometry_msgs
-	sensor_msgs
-	robotnik_msgs
-	std_msgs
-    diagnostic_updater
-    ackermann_msgs
-)
+find_package(ackermann_msgs REQUIRED)
+find_package(ament_cmake REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(robotnik_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+# diagnostic_updater
 
-#add_message_files(
-#  FILES
-#  guardian_state.msg
-#)
-
-## Generate services in the 'srv' folder
-#add_service_files(DIRECTORY srv 
-#  FILES
-#  set_odometry.srv
-#)
-
-#generate_messages(
-#  DEPENDENCIES
-#)
-
-###################################
-## catkin specific configuration ##
-###################################
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES summit_xl_control
-    CATKIN_DEPENDS
-    roscpp
-    tf
-    nav_msgs 
-    diagnostic_updater
-    ackermann_msgs
-#  DEPENDS system_lib
-)
-
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-)
 
 ## Declare a cpp executable
-add_executable(summit_controller_dspic src/summit_controller_dspic.cpp  src/SerialDevice.cc)
-add_dependencies(summit_controller_dspic summit_controller_dspic_generate_messages_cpp)
+add_executable(${PROJECT_NAME}
+  src/summit_controller_dspic.cpp
+  src/SerialDevice.cc
+)
 
-## Specify libraries to link a library or executable target against
-target_link_libraries(summit_controller_dspic
+ament_target_dependencies(${PROJECT_NAME}
+  rclcpp
+  geometry_msgs
+  nav_msgs
+  sensor_msgs
+  tf2
+  tf2_geometry_msgs
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE include)
+
+target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
+
+
+
+set(CATKIN_PACKAGE_LIB_DESTINATION lib)
+set(CATKIN_PACKAGE_BIN_DESTINATION lib/${PROJECT_NAME})
+set(CATKIN_PACKAGE_INCLUDE_DESTINATION include)
+set(CATKIN_PACKAGE_SHARE_DESTINATION share/${PROJECT_NAME})
+
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+# Mark other files for installation (e.g. launch and bag files, etc.)
+install(
+  DIRECTORY
+    config
+    launch
+  DESTINATION
+    ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+ament_package()
