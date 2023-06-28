@@ -481,6 +481,8 @@ int SerialDevice::ReadPort(char* result, int* read_bytes, int num_bytes)
             return SERIAL_ERROR;
         }
     }
+
+    return SERIAL_OK;  // (JLBC)
 }
 
 /*!	\fn int SerialDevice::GetBaud(void)
