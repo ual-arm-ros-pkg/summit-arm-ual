@@ -35,85 +35,95 @@
 /**< \author Kevin Watts */
 /**< \brief Recovers hardware ID from IMU device */
 
-
-#include <string>
 #include <boost/format.hpp>
+#include <string>
 
-#include "ros/console.h"
-#include "microstrain_3dmgx2_imu/3dmgx2.h"
 #include "log4cxx/logger.h"
+#include "microstrain_3dmgx2_imu/3dmgx2.h"
+#include "ros/console.h"
 
-std::string getID(microstrain_3dmgx2_imu::IMU &imu)
+std::string getID(microstrain_3dmgx2_imu::IMU& imu)
 {
-  char dev_name[17];
-  char dev_model_num[17];
-  char dev_serial_num[17];
-  char dev_opt[17];
-  imu.getDeviceIdentifierString(microstrain_3dmgx2_imu::IMU::ID_DEVICE_NAME, dev_name);
-  imu.getDeviceIdentifierString(microstrain_3dmgx2_imu::IMU::ID_MODEL_NUMBER, dev_model_num);
-  imu.getDeviceIdentifierString(microstrain_3dmgx2_imu::IMU::ID_SERIAL_NUMBER, dev_serial_num);
-  imu.getDeviceIdentifierString(microstrain_3dmgx2_imu::IMU::ID_DEVICE_OPTIONS, dev_opt);
-  
-  char *dev_name_ptr = dev_name;
-  char *dev_model_num_ptr = dev_model_num;
-  char *dev_serial_num_ptr = dev_serial_num;
-  
-  while (*dev_name_ptr == ' ')
-    dev_name_ptr++;
-  while (*dev_model_num_ptr == ' ')
-    dev_model_num_ptr++;
-  while (*dev_serial_num_ptr == ' ')
-    dev_serial_num_ptr++;
-  
-  return (boost::format("%s_%s-%s")%dev_name_ptr%dev_model_num_ptr%dev_serial_num_ptr).str();
+    char dev_name[17];
+    char dev_model_num[17];
+    char dev_serial_num[17];
+    char dev_opt[17];
+    imu.getDeviceIdentifierString(
+        microstrain_3dmgx2_imu::IMU::ID_DEVICE_NAME, dev_name);
+    imu.getDeviceIdentifierString(
+        microstrain_3dmgx2_imu::IMU::ID_MODEL_NUMBER, dev_model_num);
+    imu.getDeviceIdentifierString(
+        microstrain_3dmgx2_imu::IMU::ID_SERIAL_NUMBER, dev_serial_num);
+    imu.getDeviceIdentifierString(
+        microstrain_3dmgx2_imu::IMU::ID_DEVICE_OPTIONS, dev_opt);
+
+    char* dev_name_ptr       = dev_name;
+    char* dev_model_num_ptr  = dev_model_num;
+    char* dev_serial_num_ptr = dev_serial_num;
+
+    while (*dev_name_ptr == ' ') dev_name_ptr++;
+    while (*dev_model_num_ptr == ' ') dev_model_num_ptr++;
+    while (*dev_serial_num_ptr == ' ') dev_serial_num_ptr++;
+
+    return (boost::format("%s_%s-%s") % dev_name_ptr % dev_model_num_ptr %
+            dev_serial_num_ptr)
+        .str();
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-  if (argc < 2 || argc > 3)
-  {
-    fprintf(stderr, "usage: get_id /dev/ttyUSB? [quiet]\nOutputs the device ID of an IMU at that port. Add a second argument for script friendly output.\n");
-    return 1;
-  }
+    if (argc < 2 || argc > 3)
+    {
+        fprintf(
+            stderr,
+            "usage: get_id /dev/ttyUSB? [quiet]\nOutputs the device ID of an "
+            "IMU at that port. Add a second argument for script friendly "
+            "output.\n");
+        return 1;
+    }
 
-  bool verbose = (argc == 2);
-  if (!verbose)
-  {
-    // In quiet mode we want to turn off logging levels that go to stdout.
-    log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
-    logger->setLevel(ros::console::g_level_lookup[ros::console::levels::Error]);
-    ros::console::notifyLoggerLevelsChanged();
-  }
+    bool verbose = (argc == 2);
+    if (!verbose)
+    {
+        // In quiet mode we want to turn off logging levels that go to stdout.
+        log4cxx::LoggerPtr logger =
+            log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
+        logger->setLevel(
+            ros::console::g_level_lookup[ros::console::levels::Error]);
+        ros::console::notifyLoggerLevelsChanged();
+    }
 
-  microstrain_3dmgx2_imu::IMU imu;
+    microstrain_3dmgx2_imu::IMU imu;
 
-  try
-  {
-    imu.openPort(argv[1]);
-  }
-  catch (microstrain_3dmgx2_imu::Exception& e) 
-  {
-    fprintf(stderr, "Unable to open IMU at port %s. IMU may be disconnected.\n%s", argv[1], e.what());
-    return 1;
-  }
+    try
+    {
+        imu.openPort(argv[1]);
+    }
+    catch (microstrain_3dmgx2_imu::Exception& e)
+    {
+        fprintf(
+            stderr,
+            "Unable to open IMU at port %s. IMU may be disconnected.\n%s",
+            argv[1], e.what());
+        return 1;
+    }
 
-  imu.initTime(0.0);
-  
-  std::string id = getID(imu);
+    imu.initTime(0.0);
 
-  if (verbose)
-    fprintf(stdout, "IMU Device at port %s has ID: ", argv[1]);
-  fprintf(stdout, "%s\n", id.c_str());
+    std::string id = getID(imu);
 
-  try
-  {
-    imu.closePort();
-  } 
-  catch (microstrain_3dmgx2_imu::Exception& e) 
-  {
-    fprintf(stderr, "Exception thrown while stopping IMU.\n%s", e.what());
-    return 1;
-  }
-  
-  return 0;
+    if (verbose) fprintf(stdout, "IMU Device at port %s has ID: ", argv[1]);
+    fprintf(stdout, "%s\n", id.c_str());
+
+    try
+    {
+        imu.closePort();
+    }
+    catch (microstrain_3dmgx2_imu::Exception& e)
+    {
+        fprintf(stderr, "Exception thrown while stopping IMU.\n%s", e.what());
+        return 1;
+    }
+
+    return 0;
 }
