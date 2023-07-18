@@ -36,7 +36,7 @@
 
 using namespace summit_ctrl_dspic;
 
-std::string              port = "/dev/ttyUSB0";
+std::string              port = "/dev/ttyS0";
 summit_controller_dspic* summit_controller;
 
 const bool summit_controller_dspic::bLocalOdometry = true;

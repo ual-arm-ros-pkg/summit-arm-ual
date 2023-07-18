@@ -74,7 +74,7 @@ DEF_EXCEPTION(CorruptedDataException, Exception);
  * Example code:
  * \code
  *   microstrain_3dmgx2_imu::IMU imu;
- *   imu.open_port("/dev/ttyUSB0");
+ *   imu.open_port("/dev/ttyS0");
  *   imu.init_time();
  *   imu.init_gyros();
  *   imu.set_continuous(microstrain_3dmgx2_imu::IMU::CMD_ACCEL_ANGRATE_ORIENT);

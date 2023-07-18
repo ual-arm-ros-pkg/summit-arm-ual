@@ -33,7 +33,7 @@
 //! Timeout for controlling the communication with the device (in seconds)
 #define ARDUIMU_TIMEOUT_COMM 2.0
 
-#define ARDUIMU_DEFAULT_PORT "/dev/ttyUSB0"
+#define ARDUIMU_DEFAULT_PORT "/dev/ttyS0"
 #define ARDUIMU_DEFAULT_PARITY "none"  //"even" "odd""none"
 #define ARDUIMU_DEFAULT_TRANSFERRATE 115200  // 9600
 #define ARDUIMU_DEFAULT_DATA_SIZE 8

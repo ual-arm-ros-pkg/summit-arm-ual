@@ -36,7 +36,7 @@
 #define DSPIC_TIMEOUT_COMM 2.0
 
 //#define DSPIC_DEFAULT_PORT 	                "/dev/ttyS0"
-//#define DSPIC_DEFAULT_PORT                    "/dev/ttyUSB0"
+//#define DSPIC_DEFAULT_PORT                    "/dev/ttyS0"
 #define DSPIC_DEFAULT_PARITY "none"  //"even" "odd""none"
 #define DSPIC_DEFAULT_TRANSFERRATE 38400  // 9600
 #define DSPIC_DEFAULT_DATA_SIZE 8
