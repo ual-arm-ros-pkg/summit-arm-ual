@@ -1837,6 +1837,9 @@ int main(int argc, char** argv)
     // Create node object
     summit_controller = new summit_controller_dspic(port);
 
+    // Start enabled:
+    summit_controller->ToggleMotorPower('1');
+
     // Publishing
     auto odom_pub = n->create_publisher<nav_msgs::msg::Odometry>("/odom", 50);
     auto battery_pub =
