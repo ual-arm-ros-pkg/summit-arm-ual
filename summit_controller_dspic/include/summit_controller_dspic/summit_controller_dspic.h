@@ -19,7 +19,6 @@
 #include <robotnik_msgs/srv/get_mode.hpp>
 #include <robotnik_msgs/srv/set_mode.hpp>
 #include <robotnik_msgs/srv/set_odometry.hpp>
-#include <sensor_msgs/msg/joy.hpp>  // joystick
 #include <vector>
 
 #include "SerialDevice.h"
@@ -318,9 +317,7 @@ class summit_controller_dspic
         const geometry_msgs::msg::Twist::ConstSharedPtr& cmd_vel);
     // void commandCallback(const
     // ackermann_msgs::AckermannDriveStamped::ConstPtr& msg);
-    //! Callback - Joystick buttons - Define control mode (kinematic
-    //! configuration)
-    void joystickCallback(const sensor_msgs::msg::Joy::ConstSharedPtr& msg);
+
     //! Set odometry service function
     bool set_odometry(
         const robotnik_msgs::srv::SetOdometry_Request& req,

@@ -20,6 +20,7 @@
 #include <robotnik_msgs/srv/set_mode.hpp>
 #include <robotnik_msgs/srv/set_odometry.hpp>  // service
 #include <sensor_msgs/msg/joint_state.hpp>
+#include <std_msgs/msg/bool.hpp>
 #include <std_msgs/msg/float32.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
@@ -1717,43 +1718,6 @@ void summit_controller_dspic::cmdVelCallback(
     // angle=%5.2f", msg->drive.speed, msg->drive.steering_angle);
 }
 
-/*!     \fn void summit_controller_dspic::joystickCallback(const
- * sensor_msgs::JoyConstPtr& msg) Callback - Joystick buttons - Define control
- * mode (kinematic configuration)
- */
-void summit_controller_dspic::joystickCallback(
-    const sensor_msgs::msg::Joy::ConstSharedPtr& msg)
-{
-    //	static bool bRecoveryButtons[4] = {false, false, false, false}; // Need
-    // to press first 4 buttons to recovery 	for (int i=0; i<4; i++)
-    //          if ( msg->buttons[i] == 1 ) bRecoveryButtons[i] = true;
-
-    if (msg->buttons[0] == 1)
-    {
-        //        if (!dual_mode_) dual_mode_= true;
-        //        else dual_mode_ = false;
-        ROS12_INFO("SET MOTOR POWER ON");
-        this->ToggleMotorPower('1');
-    }
-    if (msg->buttons[1] == 1)
-    {
-        //          if (!paralel_mode_) paralel_mode_ = true;
-        //          else paralel_mode_ = false;
-        ROS12_INFO("SET MOTOR POWER OFF");
-        this->ToggleMotorPower('0');
-    }
-
-    /*
-            // Checks the communication status
-            rclcpp::Time current_time = rclcpp::Clock().now();
-            if ( (current_time - tDsPicReply).seconds() > DSPIC_TIMEOUT_COMM) {
-                    ROS12_ERROR("summit_controller_dspic::Standby: Timeout in
-       communication with the device"); tDsPicReply = rclcpp::Clock().now();  //
-       Resets the timer
-            }
-    */
-}
-
 /*!     \fn  Service set odometry
  *      Sets the odometry of the robot
  */
@@ -1890,10 +1854,12 @@ int main(int argc, char** argv)
     // n.subscribe<ackermann_msgs::AckermannDriveStamped>("/summit/command", 1,
     // &summit_controller_dspic::commandCallback, summit_controller);
 
-    auto joy_sub = n->create_subscription<sensor_msgs::msg::Joy>(
-        "/joy", 1,  //
-        [](const sensor_msgs::msg::Joy::ConstSharedPtr& m) {
-            summit_controller->joystickCallback(m);
+    auto activate_sub = n->create_subscription<std_msgs::msg::Bool>(
+        "/summit/activate_motor_power", 1,  //
+        [](const std_msgs::msg::Bool::ConstSharedPtr& m) {
+            const char c = m->data ? '1':'0';
+            summit_controller->ToggleMotorPower(c);
+            ROS12_INFO("MOTOR POWER: %c", c);
         });
 
     // Service set_odometry
